@@ -1,0 +1,14 @@
+<div [ngClass]="{ row: alignment() === 'row', col: alignment() === 'col' }">
+  <mat-checkbox
+    class="example-margin"
+    [(ngModel)]="develop"
+    [disabled]="!enabledEnvSelection()"
+    >Develop</mat-checkbox
+  >
+  <mat-checkbox
+    class="example-margin"
+    [(ngModel)]="test"
+    [disabled]="!enabledEnvSelection()"
+    >Test</mat-checkbox
+  >
+</div>

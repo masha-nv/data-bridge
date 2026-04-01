@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.move-env {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.action-btn {
+  margin-top: 3rem;
+}

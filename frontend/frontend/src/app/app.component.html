@@ -1,0 +1,47 @@
+<div class="container">
+  <h1>Data Bridge</h1>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam id
+    repellendus voluptatibus exercitationem voluptatem, iusto sapiente
+    reprehenderit obcaecati aliquam.
+  </p>
+
+  <mat-form-field appearance="outline">
+    <mat-label>I want to:</mat-label>
+    <mat-select [(ngModel)]="intent">
+      <mat-option value="search">Search</mat-option>
+      <mat-option value="move">Move data</mat-option>
+    </mat-select>
+  </mat-form-field>
+  @if (intent() === "search") {
+    <app-search></app-search>
+  } @else if (intent() === "move") {
+    <app-move-data></app-move-data>
+  } @else {
+    <p>Select action</p>
+  }
+
+  <div>
+    @if (intent() === "search") {
+      <app-environment alignment="row"></app-environment>
+    } @else if (intent() === "move") {
+      <div class="move-env">
+        <div>
+          <mat-label>From:</mat-label>
+          <app-environment alignment="col"></app-environment>
+        </div>
+        <div>
+          <mat-label>To:</mat-label>
+          <app-environment alignment="col"></app-environment>
+        </div>
+      </div>
+    }
+  </div>
+  <div class="action-btn">
+    @if (!!intent()) {
+      <button [disabled]="false" (click)="handleAction()" mat-flat-button>
+        {{ intent() === "search" ? "Search" : "Move Data" }}
+      </button>
+    }
+  </div>
+</div>

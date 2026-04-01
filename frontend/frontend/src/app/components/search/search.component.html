@@ -1,0 +1,24 @@
+<div class="container-inner">
+  <mat-form-field>
+    <mat-label>I want to search by:</mat-label>
+    <mat-select [(ngModel)]="searchBy" multiple>
+      <mat-option value="beneId">Beneficiary ID</mat-option>
+      <mat-option value="beneName">Beneficiary Name</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="search-fields">
+    @for (item of searchBy(); track item) {
+      @if (item === "beneId") {
+        <mat-form-field>
+          <mat-label>Beneficiary ID</mat-label>
+          <input type="text" matInput [(ngModel)]="beneId" />
+        </mat-form-field>
+      } @else if (true) {
+        <mat-form-field>
+          <mat-label>Beneficiary Name</mat-label>
+          <input type="text" matInput [(ngModel)]="beneName" />
+        </mat-form-field>
+      }
+    }
+  </div>
+</div>
