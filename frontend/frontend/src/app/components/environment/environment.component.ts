@@ -1,3 +1,4 @@
+import { ENVIRONMENT, INTENT } from './../../enums';
 import {
   Component,
   computed,
@@ -22,7 +23,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AppService } from '../../services/app.service';
 import { CommonModule } from '@angular/common';
-
+import { EnvironmentService } from '../../services/environment.service';
+import { MatRadioModule } from '@angular/material/radio';
 @Component({
   selector: 'app-environment',
   standalone: true,
@@ -35,25 +37,19 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatCheckboxModule,
     CommonModule,
+    MatRadioModule,
   ],
   templateUrl: './environment.component.html',
   styleUrl: './environment.component.scss',
 })
 export class EnvironmentComponent {
   appService = inject(AppService);
-  develop = signal(false);
-  test = signal(false);
-  enabledEnvSelection = this.appService.isEnvSelectionEnabled;
-  alignment = input('row');
+  envService = inject(EnvironmentService);
 
-  constructor() {
-    effect(
-      () => {
-        if (this.appService.intent()) {
-          this.appService.enableEnvSelection(false);
-        }
-      },
-      { allowSignalWrites: true },
-    );
-  }
+  intent = input.required<INTENT>();
+
+  enabledEnvSelection = computed(() => this.envService.isEnvSelectionEnabled());
+
+  ENVIRONMENT = ENVIRONMENT;
+  INTENT = INTENT;
 }

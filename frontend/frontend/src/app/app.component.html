@@ -8,39 +8,26 @@
 
   <mat-form-field appearance="outline">
     <mat-label>I want to:</mat-label>
-    <mat-select [(ngModel)]="intent">
+    <mat-select [(ngModel)]="appService.intent">
       <mat-option value="search">Search</mat-option>
       <mat-option value="move">Move data</mat-option>
     </mat-select>
   </mat-form-field>
-  @if (intent() === "search") {
+  <br />
+  @if (appService.intent() === INTENT.SEARCH) {
     <app-search></app-search>
-  } @else if (intent() === "move") {
+  } @else if (appService.intent() === "move") {
     <app-move-data></app-move-data>
   } @else {
     <p>Select action</p>
   }
 
-  <div>
-    @if (intent() === "search") {
-      <app-environment alignment="row"></app-environment>
-    } @else if (intent() === "move") {
-      <div class="move-env">
-        <div>
-          <mat-label>From:</mat-label>
-          <app-environment alignment="col"></app-environment>
-        </div>
-        <div>
-          <mat-label>To:</mat-label>
-          <app-environment alignment="col"></app-environment>
-        </div>
-      </div>
-    }
-  </div>
+  <app-environment [intent]="appService.intent()"></app-environment>
+
   <div class="action-btn">
-    @if (!!intent()) {
+    @if (!!appService.intent()) {
       <button [disabled]="false" (click)="handleAction()" mat-flat-button>
-        {{ intent() === "search" ? "Search" : "Move Data" }}
+        {{ appService.intent() === INTENT.SEARCH ? "Search" : "Move Data" }}
       </button>
     }
   </div>

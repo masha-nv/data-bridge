@@ -25,6 +25,7 @@ import { SearchComponent } from './components/search/search.component';
 import { MoveDataComponent } from './components/move-data/move-data.component';
 import { EnvironmentComponent } from './components/environment/environment.component';
 import { MatButtonModule } from '@angular/material/button';
+import { INTENT } from './enums';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -45,23 +46,13 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  intent = signal('');
-  appService = inject(AppService);
-  moveDataComponent = viewChild(MoveDataComponent);
+  public appService = inject(AppService);
 
-  constructor() {
-    effect(
-      () => {
-        if (!!this.intent()) {
-          this.appService.triggerIntentChanged(this.intent());
-        }
-      },
-      { allowSignalWrites: true },
-    );
-  }
+  moveDataComponent = viewChild(MoveDataComponent);
+  INTENT = INTENT;
 
   handleAction() {
-    if (this.intent() === 'move') {
+    if (this.appService.intent() === 'move') {
       this.moveDataComponent()?.handleAction();
     }
   }

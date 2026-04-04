@@ -2,19 +2,12 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { INTENT } from '../enums';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
-  isEnvSelectionEnabled = signal(false);
-  intent = signal('');
+  intent = signal(INTENT.NONE);
   http = inject(HttpClient);
-  enableEnvSelection(flag: boolean) {
-    this.isEnvSelectionEnabled.update(() => flag);
-  }
-
-  triggerIntentChanged(intent: string) {
-    this.intent.update(() => intent);
-  }
 
   search(payload: {
     searchBy: string[];

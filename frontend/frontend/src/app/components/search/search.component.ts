@@ -49,13 +49,5 @@ export class SearchComponent {
       },
       { allowSignalWrites: true },
     );
-    effect(
-      () => {
-        this.appService.enableEnvSelection(
-          !!this.searchBy() && (!!this.beneId() || !!this.beneName()),
-        );
-      },
-      { allowSignalWrites: true },
-    );
   }
 }

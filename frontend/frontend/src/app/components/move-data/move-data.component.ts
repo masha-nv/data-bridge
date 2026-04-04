@@ -50,15 +50,6 @@ export class MoveDataComponent implements OnInit {
       .subscribe();
   }
 
-  constructor() {
-    effect(
-      () => {
-        this.appService.enableEnvSelection(!!this.selectedTable());
-      },
-      { allowSignalWrites: true },
-    );
-  }
-
   handleAction() {
     this.appService
       .handleAction('move', {
