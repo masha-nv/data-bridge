@@ -4,6 +4,7 @@ import { ENVIRONMENT } from '../enums';
 import { EnvironmentService } from './environment.service';
 import { MoveResponse, SearchRequest } from './interfaces/search-request';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class TablesService {
   http = inject(HttpClient);
@@ -13,7 +14,9 @@ export class TablesService {
   searchBy = signal<string[]>([]);
 
   get(env: ENVIRONMENT, table: string) {
-    return this.http.get(`/api/rows?env=${env}&table=${table}`);
+    return this.http.get(
+      `${environment.apiUrl}/api/rows?env=${env}&table=${table}`,
+    );
   }
 
   handleTableChange(table: string) {
@@ -23,21 +26,28 @@ export class TablesService {
 
   getColumns(table: string) {
     return this.http
-      .get<string[]>(`/api/columls?table=${table}`)
+      .get<string[]>(`${environment.apiUrl}/api/columls?table=${table}`)
       .pipe(tap((res) => this.columns.set(res)))
       .subscribe();
   }
 
   getTables(env: string) {
-    return this.http.get<string[]>(`/api/tables?env=${env}`);
+    console.log('env is: ', environment);
+    return this.http.get<string[]>(
+      `${environment.apiUrl}/api/tables?env=${env}`,
+    );
   }
 
   search(payload: SearchRequest) {
-    return this.http.post<Record<ENVIRONMENT, []>>('/api/search', payload).pipe(
-      tap((res) => {
-        this.searchResults.set(res);
-      }),
-    );
+    return this.http
+      .post<
+        Record<ENVIRONMENT, []>
+      >(`${environment.apiUrl}/api/search`, payload)
+      .pipe(
+        tap((res) => {
+          this.searchResults.set(res);
+        }),
+      );
   }
 
   moveData(payload: {
@@ -45,6 +55,9 @@ export class TablesService {
     fromEnv: string;
     toEnv: string;
   }): Observable<MoveResponse> {
-    return this.http.post<MoveResponse>('/api/move', payload);
+    return this.http.post<MoveResponse>(
+      `${environment.apiUrl}/api/move`,
+      payload,
+    );
   }
 }

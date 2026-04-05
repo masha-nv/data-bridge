@@ -1,11 +1,18 @@
 {
-  "name": "electron-app",
+  "name": "data-utils-electron",
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "copy-dbs": "cp ../backend/*.db . || echo 'No DB files to copy.'",
+    "clean-all": "rm -rf dist && rm -rf ../frontend/frontend/dist",
+    "build-angular-prod": "cd ../frontend/frontend && npm install && npm run build -- --configuration production",
+    "copy-dist": "mkdir -p dist/browser && cp -r ../frontend/frontend/dist/frontend/browser/* dist/browser/",
+    "build-backend": "cd ../backend && go build -o ../electron/backend main.go && cd ../electron",
+    "start": "electron .",
+    "build-and-start": "npm run clean-all && npm run build-angular-prod && npm run copy-dist && npm run build-backend && npm run copy-dbs && npm run start"
   },
   "devDependencies": {
-    "electron": "^29.0.0"
+    "electron": "^29.0.0",
+    "electron-packager": "^17.1.1"
   }
 }

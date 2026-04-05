@@ -14,7 +14,8 @@ function createWindow() {
       contextIsolation: true,
     },
   });
-  mainWindow.loadURL("http://localhost:4200"); // Angular dev server
+  // In production, serve Angular build from dist
+  mainWindow.loadFile(path.join(__dirname, "dist", "browser", "index.html"));
   mainWindow.on("closed", function () {
     mainWindow = null;
     if (goProcess) goProcess.kill();
@@ -22,17 +23,22 @@ function createWindow() {
 }
 
 app.on("ready", () => {
-  // Start Go backend
-  goProcess = spawn("go", ["run", "main.go"], {
-    cwd: path.join(__dirname, "../backend"),
-  });
+  // Start Go backend binary (must be built and placed in electron/ as 'backend')
+  const backendPath = path.join(
+    __dirname,
+    process.platform === "win32" ? "backend.exe" : "backend",
+  );
+  goProcess = spawn(backendPath, [], { cwd: __dirname });
   goProcess.stdout.on("data", (data) => {
-    console.log(`Go: ${data}`);
+    console.log(`[Go backend]: ${data}`);
   });
   goProcess.stderr.on("data", (data) => {
-    console.error(`Go error: ${data}`);
+    console.error(`[Go backend error]: ${data}`);
   });
   createWindow();
+});
+app.on("quit", () => {
+  if (goProcess) goProcess.kill();
 });
 
 app.on("window-all-closed", function () {

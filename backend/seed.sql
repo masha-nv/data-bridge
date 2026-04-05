@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS beneficiaries (
 );
 
 INSERT INTO beneficiaries (bene_id, bene_name) VALUES
-  ('123', 'Alice'),
-  ('456', 'Bob');
+  (lower(hex(randomblob(16))), 'Alice'),
+  (lower(hex(randomblob(16))), 'Bob');
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -14,5 +14,5 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 INSERT INTO users (user_id, user_name) VALUES 
-('1', 'Masha'),
-('2', 'Katya');
+(lower(hex(randomblob(16))), 'Masha'),
+(lower(hex(randomblob(16))), 'Katya');
