@@ -1,0 +1,13 @@
+<mat-table mat-table [dataSource]="tableService.searchResults()?.[env()] ?? []">
+  <ng-container matColumnDef="user_id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let element">{{ element.user_id }}</td>
+  </ng-container>
+  <ng-container matColumnDef="user_name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.user_name }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</mat-table>

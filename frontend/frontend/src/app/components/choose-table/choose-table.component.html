@@ -1,7 +1,10 @@
 <div>
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="width-100">
     <mat-label>Choose Table</mat-label>
-    <mat-select [(ngModel)]="selectedTable">
+    <mat-select
+      [(ngModel)]="tableService.selectedTable"
+      (selectionChange)="onTableChange($event.value)"
+    >
       @for (table of tables(); track table) {
         <mat-option [value]="table">{{ table }}</mat-option>
       }

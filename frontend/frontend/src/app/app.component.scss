@@ -5,6 +5,28 @@
   flex-direction: column;
 }
 
+.container-inner {
+  width: 70%;
+}
+
 .action-btn {
+  display: flex;
   margin-top: 3rem;
+  justify-content: space-between;
+}
+
+.search-results {
+  display: flex;
+  gap: 5rem;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.search-results-title {
+  margin: 0 0 1rem 1rem;
+  font-weight: 600;
 }

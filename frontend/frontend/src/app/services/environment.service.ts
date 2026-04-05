@@ -7,8 +7,6 @@ import { AppService } from './app.service';
 export class EnvironmentService {
   private appService = inject(AppService);
 
-  private _isEnvSelectionEnabled = signal<boolean>(false);
-
   searchEnvDev = signal(ENVIRONMENT.NONE);
   searchEnvTest = signal(ENVIRONMENT.NONE);
   fromEnv = signal(ENVIRONMENT.NONE);

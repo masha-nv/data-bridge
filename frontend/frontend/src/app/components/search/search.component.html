@@ -1,24 +1,25 @@
 <div class="container-inner">
-  <mat-form-field>
-    <mat-label>I want to search by:</mat-label>
-    <mat-select [(ngModel)]="searchBy" multiple>
-      <mat-option value="beneId">Beneficiary ID</mat-option>
-      <mat-option value="beneName">Beneficiary Name</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <div class="search-fields">
-    @for (item of searchBy(); track item) {
-      @if (item === "beneId") {
-        <mat-form-field>
-          <mat-label>Beneficiary ID</mat-label>
-          <input type="text" matInput [(ngModel)]="beneId" />
-        </mat-form-field>
-      } @else if (true) {
-        <mat-form-field>
-          <mat-label>Beneficiary Name</mat-label>
-          <input type="text" matInput [(ngModel)]="beneName" />
+  <app-choose-table></app-choose-table>
+
+  @if (tableService.columns().length > 0) {
+    <mat-form-field class="width-100">
+      <mat-label>I want to search by:</mat-label>
+      <mat-select (selectionChange)="handleSearchBySelection($event)" multiple>
+        @for (column of tableService.columns(); track column) {
+          <mat-option [value]="column">{{ column }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+  <form [formGroup]="form" class="search-fields">
+    @for (item of tableService.searchBy(); track item) {
+      @if (form.contains(item)) {
+        <mat-form-field class="width-100">
+          <mat-label>{{ item }}</mat-label>
+          <input type="text" matInput [formControlName]="item" />
         </mat-form-field>
       }
     }
-  </div>
+  </form>
 </div>

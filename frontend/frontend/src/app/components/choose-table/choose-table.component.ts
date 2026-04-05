@@ -22,9 +22,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AppService } from '../../services/app.service';
 import { tap } from 'rxjs';
+import { EnvironmentService } from '../../services/environment.service';
+import { UsersComponent } from '../users/users.component';
+import { ENVIRONMENT } from '../../enums';
+import { TablesService } from '../../services/tables.service';
 
 @Component({
-  selector: 'app-move-data',
+  selector: 'app-choose-table',
   standalone: true,
   imports: [
     RouterOutlet,
@@ -34,18 +38,21 @@ import { tap } from 'rxjs';
     ReactiveFormsModule,
     MatInputModule,
     MatCheckboxModule,
+    UsersComponent,
   ],
-  templateUrl: './move-data.component.html',
-  styleUrl: './move-data.component.scss',
+  templateUrl: './choose-table.component.html',
+  styleUrl: './choose-table.component.scss',
 })
-export class MoveDataComponent implements OnInit {
+export class ChooseTableComponent implements OnInit {
   appService = inject(AppService);
+  tableService = inject(TablesService);
+  envService = inject(EnvironmentService);
+
   tables = signal<string[]>([]);
-  selectedTable = signal('');
 
   ngOnInit(): void {
-    this.appService
-      .getTables('develop')
+    this.tableService
+      .getTables(ENVIRONMENT.DEVELOP)
       .pipe(tap((response) => this.tables.update(() => response)))
       .subscribe();
   }
@@ -53,10 +60,14 @@ export class MoveDataComponent implements OnInit {
   handleAction() {
     this.appService
       .handleAction('move', {
-        table: this.selectedTable(),
-        fromEnv: 'test',
-        toEnv: 'develop',
+        table: this.tableService.selectedTable(),
+        fromEnv: this.envService.fromEnv(),
+        toEnv: this.envService.toEnv(),
       })
       .subscribe();
+  }
+
+  onTableChange(table: string) {
+    this.tableService.handleTableChange(table);
   }
 }

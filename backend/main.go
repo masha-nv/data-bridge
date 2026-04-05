@@ -27,10 +27,9 @@ func openDB(env string) (*sql.DB, error) {
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
 	type Req struct {
-		SearchBy []string `json:"searchBy"`
-		BeneId   string   `json:"beneId"`
-		BeneName string   `json:"beneName"`
-		Envs     []string `json:"envs"`
+		Value map[string]string `json:"value"`
+		Envs  []string          `json:"envs"`
+		Table string            `json:"table"`
 	}
 	var req Req
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -45,16 +44,54 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		defer db.Close()
-		query := "SELECT * FROM beneficiaries WHERE 1=1"
+		table := req.Table
+		if table == "" {
+			http.Error(w, "table is required", 400)
+			return
+		}
+		query := "SELECT * FROM " + table + " WHERE 1=1"
 		args := []any{}
-		if contains(req.SearchBy, "beneId") && req.BeneId != "" {
-			query += " AND bene_id = ?"
-			args = append(args, req.BeneId)
+		// Get actual columns for the table
+		schemaDB, err := openDB(env)
+		if err != nil {
+			results[env] = []map[string]any{{"error": err.Error()}}
+			continue
 		}
-		if contains(req.SearchBy, "beneName") && req.BeneName != "" {
-			query += " AND bene_name LIKE ?"
-			args = append(args, "%"+req.BeneName+"%")
+		colRows, err := schemaDB.Query("PRAGMA table_info(" + table + ")")
+		if err != nil {
+			results[env] = []map[string]any{{"error": err.Error()}}
+			schemaDB.Close()
+			continue
 		}
+		actualCols := map[string]bool{}
+		for colRows.Next() {
+			var cid int
+			var name, ctype string
+			var notnull, pk int
+			var dfltValue any
+			if err := colRows.Scan(&cid, &name, &ctype, &notnull, &dfltValue, &pk); err == nil {
+				actualCols[name] = true
+			}
+		}
+		colRows.Close()
+		schemaDB.Close()
+		for col, val := range req.Value {
+			if val == "" {
+				continue
+			}
+			if !actualCols[col] {
+				continue // skip keys not in table
+			}
+			// Use LIKE for columns containing 'name', exact match otherwise
+			if strings.Contains(strings.ToLower(col), "name") {
+				query += " AND " + col + " LIKE ?"
+				args = append(args, "%"+val+"%")
+			} else {
+				query += " AND " + col + " = ?"
+				args = append(args, val)
+			}
+		}
+		results[env] = []map[string]any{} // clear before appending
 		rows, err := db.Query(query, args...)
 		if err != nil {
 			results[env] = []map[string]any{{"error": err.Error()}}
@@ -104,6 +141,40 @@ func tablesHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(tables)
 }
 
+func tableRowsHandler(w http.ResponseWriter, r *http.Request) {
+	env := r.URL.Query().Get("env") 
+	db, err := openDB(env) 
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+	defer db.Close() 
+	table := r.URL.Query().Get("table") 
+	rows, err:= db.Query(fmt.Sprintf("SELECT * FROM %s", table))
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	defer rows.Close() 
+	cols, _ := rows.Columns()
+	var results []map[string]interface{}
+	for rows.Next() {
+		vals := make([]interface{}, len(cols)) 
+		ptrs := make([]interface{}, len(cols)) 
+		for i := range vals {
+			ptrs[i] = &vals[i]
+		}
+		rows.Scan(ptrs...)
+		rowMap := map[string]interface{}{}
+		for i, col := range cols {
+			rowMap[col] = vals[i]
+		}
+		results = append(results, rowMap)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(results)
+}
+
 func moveHandler(w http.ResponseWriter, r *http.Request) {
 	type Req struct {
 		Table   string `json:"table"`
@@ -145,24 +216,68 @@ func moveHandler(w http.ResponseWriter, r *http.Request) {
 		ptrs[i] = &vals[i]
 	}
 	count := 0
-	for rows.Next() {
-		rows.Scan(ptrs...)
-		placeholders := make([]string, len(cols))
-		for i := range cols {
-			placeholders[i] = "?"
-		}
-		insert := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", req.Table, strings.Join(cols, ","), strings.Join(placeholders, ","))
-		_, err := tx.Exec(insert, vals...)
-		if err != nil {
-			tx.Rollback()
-			http.Error(w, err.Error(), 500)
-			return
-		}
-		count++
-	}
+	       for rows.Next() {
+		       rows.Scan(ptrs...)
+		       placeholders := make([]string, len(cols))
+		       for i := range cols {
+			       placeholders[i] = "?"
+		       }
+		       insert := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", req.Table, strings.Join(cols, ","), strings.Join(placeholders, ","))
+		       _, err := tx.Exec(insert, vals...)
+		       if err != nil {
+			       // Skip duplicate unique/primary key errors
+			       if strings.Contains(err.Error(), "UNIQUE constraint failed") || strings.Contains(err.Error(), "UNIQUE constraint violation") || strings.Contains(err.Error(), "constraint failed") {
+				       continue
+			       }
+			       tx.Rollback()
+			       http.Error(w, err.Error(), 500)
+			       return
+		       }
+		       count++
+	       }
 	tx.Commit()
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]any{"moved": count})
+}
+
+// clearHandler deletes all rows from all tables in the specified environment's database
+func clearHandler(w http.ResponseWriter, r *http.Request) {
+	type Req struct {
+		Env string `json:"env"`
+	}
+	var req Req
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "invalid request", 400)
+		return
+	}
+	db, err := openDB(req.Env)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+	defer db.Close()
+	// Get all table names
+	rows, err := db.Query("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	defer rows.Close()
+	var tables []string
+	for rows.Next() {
+		var name string
+		rows.Scan(&name)
+		tables = append(tables, name)
+	}
+	for _, table := range tables {
+		_, err := db.Exec("DELETE FROM " + table)
+		if err != nil {
+			http.Error(w, "failed to clear table "+table+": "+err.Error(), 500)
+			return
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]any{"cleared": tables})
 }
 
 func contains(arr []string, s string) bool {
@@ -174,10 +289,49 @@ func contains(arr []string, s string) bool {
 	return false
 }
 
+
+func columnsHandler(w http.ResponseWriter, r *http.Request) {
+       table := r.URL.Query().Get("table")
+       if table == "" {
+	       http.Error(w, "table is required", 400)
+	       return
+       }
+       // Use develop as default DB for schema
+       db, err := openDB("develop")
+       if err != nil {
+	       http.Error(w, err.Error(), 500)
+	       return
+       }
+       defer db.Close()
+       rows, err := db.Query("PRAGMA table_info(" + table + ")")
+       if err != nil {
+	       http.Error(w, err.Error(), 500)
+	       return
+       }
+       defer rows.Close()
+       var columns []string
+       for rows.Next() {
+	       var cid int
+	       var name, ctype string
+	       var notnull, pk int
+	       var dfltValue any
+	       if err := rows.Scan(&cid, &name, &ctype, &notnull, &dfltValue, &pk); err != nil {
+		       http.Error(w, err.Error(), 500)
+		       return
+	       }
+	       columns = append(columns, name)
+       }
+       w.Header().Set("Content-Type", "application/json")
+       json.NewEncoder(w).Encode(columns)
+}
+
 func main() {
 	http.HandleFunc("/api/search", searchHandler)
 	http.HandleFunc("/api/tables", tablesHandler)
 	http.HandleFunc("/api/move", moveHandler)
+	http.HandleFunc("/api/clear", clearHandler)
+	http.HandleFunc("/api/rows", tableRowsHandler)
+	http.HandleFunc("/api/columls", columnsHandler)
 	log.Println("Go backend running on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

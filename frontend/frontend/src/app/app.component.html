@@ -1,34 +1,61 @@
 <div class="container">
-  <h1>Data Bridge</h1>
-  <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam id
-    repellendus voluptatibus exercitationem voluptatem, iusto sapiente
-    reprehenderit obcaecati aliquam.
-  </p>
+  <div class="container-inner">
+    <h1>Data Bridge</h1>
 
-  <mat-form-field appearance="outline">
-    <mat-label>I want to:</mat-label>
-    <mat-select [(ngModel)]="appService.intent">
-      <mat-option value="search">Search</mat-option>
-      <mat-option value="move">Move data</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <br />
-  @if (appService.intent() === INTENT.SEARCH) {
-    <app-search></app-search>
-  } @else if (appService.intent() === "move") {
-    <app-move-data></app-move-data>
-  } @else {
-    <p>Select action</p>
-  }
+    <mat-form-field appearance="outline" class="width-100">
+      <mat-label>I want to:</mat-label>
+      <mat-select [(ngModel)]="appService.intent">
+        <mat-option value="search">Search</mat-option>
+        <mat-option value="move">Move data</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br />
+    @if (appService.intent() === INTENT.SEARCH) {
+      <app-search class="width-100"></app-search>
+    } @else if (appService.intent() === INTENT.MOVE) {
+      <app-choose-table class="width-100"></app-choose-table>
+    }
 
-  <app-environment [intent]="appService.intent()"></app-environment>
+    <app-environment
+      class="width-100"
+      [intent]="appService.intent()"
+    ></app-environment>
 
-  <div class="action-btn">
-    @if (!!appService.intent()) {
-      <button [disabled]="false" (click)="handleAction()" mat-flat-button>
-        {{ appService.intent() === INTENT.SEARCH ? "Search" : "Move Data" }}
-      </button>
+    <div class="action-btn">
+      @if (!!appService.intent()) {
+        <button mat-flat-button (click)="clear()">Clear</button>
+        <button
+          [disabled]="false"
+          (click)="handleAction()"
+          mat-raised-button
+          color="primary"
+        >
+          {{ appService.intent() === INTENT.SEARCH ? "Search" : "Move Data" }}
+        </button>
+      }
+    </div>
+    @if (!!hasResults()) {
+      <div>
+        <h3>Search Results</h3>
+        <div class="search-results width-100">
+          @if (envService.searchEnvDev()) {
+            <div class="flex-col">
+              <mat-label class="search-results-title">Develop</mat-label>
+              <app-users
+                [env]="envService.searchEnvDev() && ENVIRONMENT.DEVELOP"
+              ></app-users>
+            </div>
+          }
+          @if (envService.searchEnvTest()) {
+            <div class="flex-col">
+              <mat-label class="search-results-title">Test</mat-label>
+              <app-users
+                [env]="envService.searchEnvTest() && ENVIRONMENT.TEST"
+              ></app-users>
+            </div>
+          }
+        </div>
+      </div>
     }
   </div>
 </div>
