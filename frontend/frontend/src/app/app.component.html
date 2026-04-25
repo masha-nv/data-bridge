@@ -1,61 +1,50 @@
-<div class="container">
-  <div class="container-inner">
-    <h1>Data Bridge</h1>
+<main class="app-shell-root" [attr.data-app-title]="appTitle">
+  <header class="federal-banner">
+    <div class="app-shell-frame federal-banner__inner">
+      <span class="federal-banner__eyebrow">CMS.gov</span>
+      <span class="federal-banner__text">Centers for Medicare &amp; Medicaid Services</span>
+    </div>
+  </header>
 
-    <mat-form-field appearance="outline" class="width-100">
-      <mat-label>I want to:</mat-label>
-      <mat-select [(ngModel)]="appService.intent">
-        <mat-option value="search">Search</mat-option>
-        <mat-option value="move">Move data</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <br />
-    @if (appService.intent() === INTENT.SEARCH) {
-      <app-search class="width-100"></app-search>
-    } @else if (appService.intent() === INTENT.MOVE) {
-      <app-choose-table class="width-100"></app-choose-table>
-    }
+  <section class="top-nav">
+    <div class="app-shell-frame top-nav__inner">
+      <div class="top-nav__brand-block">
+        <span class="top-nav__product">MEPS</span>
+        <span class="top-nav__brand">{{ appTitle }}</span>
+      </div>
 
-    <app-environment
-      class="width-100"
-      [intent]="appService.intent()"
-    ></app-environment>
-
-    <div class="action-btn">
-      @if (!!appService.intent()) {
-        <button mat-flat-button (click)="clear()">Clear</button>
-        <button
-          [disabled]="false"
-          (click)="handleAction()"
-          mat-raised-button
-          color="primary"
-        >
-          {{ appService.intent() === INTENT.SEARCH ? "Search" : "Move Data" }}
-        </button>
+      @if (isAppRoute) {
+        <nav class="top-nav__links" aria-label="Primary navigation">
+          @for (group of navGroups; track group.label) {
+            @if (group.children?.length) {
+              <button class="top-nav__trigger" mat-button [matMenuTriggerFor]="featureMenu">{{ group.label }}</button>
+              <mat-menu #featureMenu="matMenu">
+                @for (item of group.children; track item.label) {
+                  <button
+                    mat-menu-item
+                    [routerLink]="item.path"
+                    [queryParams]="item.queryParams"
+                  >
+                    {{ item.label }}
+                  </button>
+                }
+              </mat-menu>
+            } @else if (group.path) {
+              <a class="top-nav__link" mat-button [routerLink]="group.path" [routerLinkActive]="'active'">
+                {{ group.label }}
+              </a>
+            }
+          }
+        </nav>
+      } @else {
+        <div class="top-nav__context">Demo desktop workflow</div>
       }
     </div>
-    @if (!!hasResults()) {
-      <div>
-        <h3>Search Results</h3>
-        <div class="search-results width-100">
-          @if (envService.searchEnvDev()) {
-            <div class="flex-col">
-              <mat-label class="search-results-title">Develop</mat-label>
-              <app-users
-                [env]="envService.searchEnvDev() && ENVIRONMENT.DEVELOP"
-              ></app-users>
-            </div>
-          }
-          @if (envService.searchEnvTest()) {
-            <div class="flex-col">
-              <mat-label class="search-results-title">Test</mat-label>
-              <app-users
-                [env]="envService.searchEnvTest() && ENVIRONMENT.TEST"
-              ></app-users>
-            </div>
-          }
-        </div>
-      </div>
-    }
-  </div>
-</div>
+  </section>
+
+  <section class="app-shell-content">
+    <div class="app-shell-frame app-shell-frame--content">
+      <router-outlet></router-outlet>
+    </div>
+  </section>
+</main>

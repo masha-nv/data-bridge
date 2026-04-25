@@ -1,0 +1,145 @@
+<section class="app-page-shell devops-shell">
+  <div class="app-page-intro">
+    <div class="page-eyebrow">Operations</div>
+    <h1>DevOps Jobs</h1>
+    <p>Read-only view of active and completed batch jobs from the demo backend.</p>
+  </div>
+
+  <mat-card appearance="outlined" class="page-card devops-toolbar-card">
+    <form class="page-form page-form-grid devops-toolbar-form" [formGroup]="form" (ngSubmit)="loadJobs()">
+      <mat-form-field appearance="outline">
+        <mat-label>Environment</mat-label>
+        <mat-select formControlName="environment">
+          @for (environment of environments(); track environment) {
+            <mat-option [value]="environment">{{ environment }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button type="submit" mat-flat-button color="primary" [disabled]="loading()">
+        @if (loading()) {
+          <mat-spinner diameter="18"></mat-spinner>
+        }
+        <span>{{ loading() ? 'Loading...' : 'Refresh Jobs' }}</span>
+      </button>
+    </form>
+
+    @if (errorMessage()) {
+      <div class="status-error">{{ errorMessage() }}</div>
+    }
+  </mat-card>
+
+  <mat-tab-group class="devops-tabs" [selectedIndex]="selectedTabIndex()" (selectedIndexChange)="handleTabChange($event)">
+    <mat-tab label="Active Jobs">
+      @if (activeRows().length === 0 && !loading()) {
+        <mat-card appearance="outlined" class="page-card empty-state-card"><p>No active jobs found.</p></mat-card>
+      } @else {
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Job ID</th>
+              <th>Batch</th>
+              <th>Thread Key</th>
+              <th>Input File</th>
+              <th>Status Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of activeRows(); track trackJob($index, row)) {
+              <tr>
+                <td>{{ row.statusCode }}</td>
+                <td>{{ row.jobId }}</td>
+                <td>{{ row.batchName }}</td>
+                <td>{{ row.threadKey }}</td>
+                <td>{{ row.inFilePath }}</td>
+                <td>{{ row.statusDateTime }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        </div>
+      }
+    </mat-tab>
+
+    <mat-tab label="Completed Jobs">
+      @if (completedRows().length === 0 && !loading()) {
+        <mat-card appearance="outlined" class="page-card empty-state-card"><p>No completed jobs found.</p></mat-card>
+      } @else {
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Job ID</th>
+              <th>Batch</th>
+              <th>Thread Key</th>
+              <th>Completed</th>
+              <th>Status Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of completedRows(); track trackJob($index, row)) {
+              <tr>
+                <td>{{ row.statusCode }}</td>
+                <td>{{ row.jobId }}</td>
+                <td>{{ row.batchName }}</td>
+                <td>{{ row.threadKey }}</td>
+                <td>{{ row.endDateTime || 'N/A' }}</td>
+                <td>{{ row.statusDateTime }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        </div>
+      }
+    </mat-tab>
+
+    <mat-tab label="Restart Failed Job">
+      <mat-card appearance="outlined" class="page-card action-card">
+        <form class="page-form" [formGroup]="restartForm" (ngSubmit)="restartFailedJobs()">
+          <mat-form-field appearance="outline">
+            <mat-label>Job IDs</mat-label>
+            <input matInput formControlName="jobIds" placeholder="Example: 1001 or 1001,1002" />
+          </mat-form-field>
+
+          <button type="submit" mat-flat-button color="primary" [disabled]="actionSubmitting()">
+            Restart Jobs
+          </button>
+        </form>
+      </mat-card>
+    </mat-tab>
+
+    <mat-tab label="Mark Job Complete">
+      <mat-card appearance="outlined" class="page-card action-card">
+        <form class="page-form page-form-grid" [formGroup]="markCompleteForm" (ngSubmit)="markSelectedJobsComplete()">
+          <mat-form-field appearance="outline">
+            <mat-label>Current Status</mat-label>
+            <input matInput formControlName="currentStatus" placeholder="Example: 2" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Job IDs</mat-label>
+            <input matInput formControlName="jobIds" placeholder="Example: 1001 or 1001,1002" />
+          </mat-form-field>
+
+          <button type="submit" mat-flat-button color="primary" [disabled]="actionSubmitting()">
+            Mark Complete
+          </button>
+        </form>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+
+  @if (actionErrorMessage()) {
+    <div class="status-error">{{ actionErrorMessage() }}</div>
+  }
+
+  @if (actionResult(); as result) {
+    <mat-card appearance="outlined" class="page-card result-card">
+      <p>Return code: {{ result.returnCode }}</p>
+      <pre>{{ result.returnMessage }}</pre>
+    </mat-card>
+  }
+</section>

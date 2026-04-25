@@ -1,76 +1,121 @@
-import { AppService } from './services/app.service';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import {
-  Component,
-  computed,
-  effect,
-  inject,
-  signal,
-  viewChild,
-} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import {
-  FormControl,
-  FormGroupDirective,
-  NgForm,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { SearchComponent } from './components/search/search.component';
-import { ChooseTableComponent } from './components/choose-table/choose-table.component';
-import { EnvironmentComponent } from './components/environment/environment.component';
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { ENVIRONMENT, INTENT } from './enums';
-import { UsersComponent } from './components/users/users.component';
-import { EnvironmentService } from './services/environment.service';
-import { TablesService } from './services/tables.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
+interface AppNavItem {
+  label: string;
+  path: string;
+  enabled: boolean;
+  queryParams?: Record<string, string>;
+}
+
+interface AppNavGroup {
+  label: string;
+  path?: string;
+  enabled: boolean;
+  children?: AppNavItem[];
+}
+
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet,
-    MatFormFieldModule,
-    MatSelectModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatCheckboxModule,
-    SearchComponent,
-    ChooseTableComponent,
+    CommonModule,
     MatButtonModule,
-    EnvironmentComponent,
-    UsersComponent,
+    MatMenuModule,
+    MatToolbarModule,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  appService = inject(AppService);
-  envService = inject(EnvironmentService);
-  tableService = inject(TablesService);
+  private readonly router = inject(Router);
 
-  hasResults = computed(
-    () =>
-      this.tableService.searchResults() &&
-      !!Object.keys(this.tableService.searchResults() ?? {}).length,
-  );
-  moveDataComponent = viewChild(ChooseTableComponent);
-  searchDataComponent = viewChild(SearchComponent);
-  INTENT = INTENT;
-  ENVIRONMENT = ENVIRONMENT;
+  protected readonly appTitle = 'MARx Maintainer';
+  protected readonly navGroups: AppNavGroup[] = [
+    {
+      label: 'Descriptions',
+      path: '/app/descriptions',
+      enabled: true,
+    },
+    {
+      label: 'Beneficiaries',
+      path: '/app/beneficiaries',
+      enabled: true,
+    },
+    {
+      label: 'DevOps',
+      enabled: true,
+      children: [
+        {
+          label: 'Active Jobs',
+          path: '/app/devops',
+          queryParams: { tab: 'active' },
+          enabled: true,
+        },
+        {
+          label: 'Completed Jobs',
+          path: '/app/devops',
+          queryParams: { tab: 'completed' },
+          enabled: true,
+        },
+        {
+          label: 'Restart Failed Job',
+          path: '/app/devops',
+          queryParams: { tab: 'restart-failed-job' },
+          enabled: true,
+        },
+        {
+          label: 'Mark Job Complete',
+          path: '/app/devops',
+          queryParams: { tab: 'mark-job-complete' },
+          enabled: true,
+        },
+        {
+          label: 'Submit Batch Job (disabled)',
+          path: '/app/submit-batch-job',
+          enabled: false,
+        },
+      ],
+    },
+    {
+      label: 'SQL Runner',
+      path: '/app/sql-runner',
+      enabled: true,
+    },
+    {
+      label: 'Bene Download',
+      path: '/app/bene-download',
+      enabled: false,
+    },
+    {
+      label: 'Change Password',
+      path: '/app/change-password',
+      enabled: false,
+    },
+    {
+      label: 'Tester Utilities',
+      path: '/app/tester-utilities',
+      enabled: false,
+    },
+  ];
 
-  handleAction() {
-    if (this.appService.intent() === INTENT.MOVE) {
-      this.moveDataComponent()?.handleAction();
-    } else if (this.appService.intent() === INTENT.SEARCH) {
-      this.searchDataComponent()?.handleAction();
-    }
+  protected get isAppRoute(): boolean {
+    return this.router.url.startsWith('/app');
   }
 
-  clear() {}
+  protected isRouteActive(path: string): boolean {
+    return this.router.url.startsWith(path);
+  }
 }

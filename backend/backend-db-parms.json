@@ -1,0 +1,74 @@
+{
+	"Dev2": {
+		"MARx": {
+			"dbDriver": "postgres",
+			"dbHost": "marx-dev-mcs-db.cluster-cr5uzdpelfak.us-east-1.rds.amazonaws.com",
+			"dbPort": "5432",
+			"dbName": "marxdevdb",
+			"dbSchema": "marx_main,marx_reference,marx_history,marx_xref,marx_udf,aws_lambda,public",
+			"dbParams": ""
+		},
+		"Batch": {
+			"dbDriver": "mysql",
+			"dbHost": "max-dev-batch-db.cr5uzdpelfak.us-east-1.rds.amazonaws.com",
+			"dbPort": "3306",
+			"dbName": "mepbs_batch_processor_pg",
+			"dbSchema": "",
+			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
+		}
+	},
+	"Test2": {
+		"MARx": {
+			"dbDriver": "postgres",
+			"dbHost": "marx-test-mcs-db-cluster.cluster-cwhgeylufzm0.us-east-1.rds.amazonaws.com",
+			"dbPort": "5432",
+			"dbName": "marxtestdb",
+			"dbSchema": "marx_main,marx_reference,marx_history,marx_xref,marx_udf,aws_lambda,public",
+			"dbParams": ""
+		},
+		"Batch": {
+			"dbDriver": "mysql",
+			"dbHost": "marx-test-batch-db.cwhgeylufzm0.us-east-1.rds.amazonaws.com",
+			"dbPort": "3306",
+			"dbName": "mepbs_batch_processor_pg",
+			"dbSchema": "",
+			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
+		}
+	},
+	"Impl2": {
+		"MARx": {
+			"dbDriver": "postgres",
+			"dbHost": "marx-impl-mcs-db-cluster.cluster-ro-ccnuvswtppio.us-east-1.rds.amazonaws.com",
+			"dbPort": "5432",
+			"dbName": "marximpldb",
+			"dbSchema": "marx_main,marx_reference,marx_history,marx_xref,marx_udf,aws_lambda,public",
+			"dbParams": ""
+		},
+		"Batch": {
+			"dbDriver": "mysql",
+			"dbHost": "max-impl-batch-db.ccnuvswtppio.us-east-1.rds.amazonaws.com",
+			"dbPort": "3306",
+			"dbName": "mepbs_batch_processor_pg",
+			"dbSchema": "",
+			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
+		}
+	},
+	"Prod2": {
+		"MARx": {
+			"dbDriver": "postgres",
+			"dbHost": "marx-prod2-mcs-db-cluster.cluster-cdkvlqcknkix.us-east-1.rds.amazonaws.com",
+			"dbPort": "5432",
+			"dbName": "marxprod2db",
+			"dbSchema": "marx_main,marx_reference,marx_history,marx_xref,marx_udf,aws_lambda,public",
+			"dbParams": ""
+		},
+		"Batch": {
+			"dbDriver": "mysql",
+			"dbHost": "marx-prod2-batch-db.cdkvlqcknkix.us-east-1.rds.amazonaws.com",
+			"dbPort": "3306",
+			"dbName": "mepbs_batch_processor_pg",
+			"dbSchema": "",
+			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
+		}
+	}
+}

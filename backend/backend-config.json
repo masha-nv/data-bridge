@@ -1,0 +1,6 @@
+{
+	"mode": "real",
+	"supportedEnvironments": "Dev2,Test2,Impl2,Prod2",
+	"dbConfigFile": "backend-db-parms.json",
+	"dbCertificateFile": "rds-ca-2019-root.pem"
+}

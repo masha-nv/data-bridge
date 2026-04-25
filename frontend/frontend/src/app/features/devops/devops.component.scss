@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+.devops-shell {
+  gap: 16px;
+}
+
+.devops-toolbar-card,
+.action-card,
+.empty-state-card {
+  padding: 16px;
+}
+
+.devops-toolbar-form {
+  align-items: end;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.action-card form {
+  align-items: start;
+}

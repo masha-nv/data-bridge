@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+
+.sql-shell {
+  gap: 16px;
+}
+
+.sql-input-card,
+.sql-result-card {
+  padding: 16px;
+}
+
+.sql-statement {
+  padding: 12px;
+  border: 1px solid var(--meps-border);
+  border-radius: 8px;
+  background: var(--meps-surface-muted);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}

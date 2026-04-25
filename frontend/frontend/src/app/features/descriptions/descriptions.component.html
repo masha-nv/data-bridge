@@ -1,0 +1,87 @@
+<section class="descriptions-shell">
+  <div class="hero-panel">
+    <div class="eyebrow">Feature Slice 01</div>
+    <h1>Descriptions Lookup</h1>
+    <!-- <p>
+      Query MARx transaction reply codes and PW-R reply codes against the demo
+      backend, using the same request contract the desktop app will keep later.
+    </p> -->
+  </div>
+
+  <mat-card class="lookup-card" appearance="outlined">
+    <form class="lookup-form" [formGroup]="form" (ngSubmit)="lookup()">
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Environment</mat-label>
+          <mat-select formControlName="environment">
+            @for (environment of environments(); track environment) {
+              <mat-option [value]="environment">{{ environment }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Description Type</mat-label>
+          <mat-select formControlName="type">
+            @for (descriptionType of descriptionTypes; track descriptionType) {
+              <mat-option [value]="descriptionType">{{ descriptionType }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Code</mat-label>
+        <input
+          matInput
+          formControlName="code"
+          placeholder="Example: T001 or I0002,S,CD"
+        />
+        @if (form.controls.code.invalid && form.controls.code.touched) {
+          <mat-error>Code is required</mat-error>
+        }
+      </mat-form-field>
+
+      @if (errorMessage()) {
+        <div class="error-banner">{{ errorMessage() }}</div>
+      }
+
+      <div class="actions">
+        <button
+          type="button"
+          mat-button
+          class="secondary-action"
+          (click)="reset()"
+          [disabled]="loading()"
+        >
+          Reset
+        </button>
+
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          class="primary-action"
+          [disabled]="isSubmitDisabled"
+        >
+          @if (loading()) {
+            <mat-spinner diameter="18"></mat-spinner>
+          }
+          <span>{{ loading() ? 'Looking Up...' : 'Lookup Description' }}</span>
+        </button>
+      </div>
+    </form>
+
+    @if (result(); as lookupResult) {
+      <section class="result-panel">
+        <div class="result-label">Lookup Result</div>
+        <div class="result-meta">
+          <span>{{ lookupResult.environment }}</span>
+          <span>{{ lookupResult.type }}</span>
+          <span>{{ lookupResult.code }}</span>
+        </div>
+        <div class="result-description">{{ lookupResult.description }}</div>
+      </section>
+    }
+  </mat-card>
+</section>

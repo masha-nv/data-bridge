@@ -1,0 +1,76 @@
+<section>
+  <section class="app-page-shell sql-shell">
+    <div class="app-page-intro">
+      <div class="page-eyebrow">Database</div>
+      <h1>SQL Runner</h1>
+      <p>Run read-only SQL statements against the demo backend environment.</p>
+    </div>
+
+  <mat-card appearance="outlined" class="page-card sql-input-card">
+    <form class="page-form" [formGroup]="form" (ngSubmit)="runSql()">
+      <mat-form-field appearance="outline">
+        <mat-label>Environment</mat-label>
+        <mat-select formControlName="environment">
+          @for (environment of environments(); track environment) {
+            <mat-option [value]="environment">{{ environment }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>SQL</mat-label>
+        <textarea matInput formControlName="sql" rows="10"></textarea>
+      </mat-form-field>
+
+      <button type="submit" mat-flat-button color="primary" [disabled]="isSubmitDisabled">
+        @if (loading()) {
+          <mat-spinner diameter="18"></mat-spinner>
+        }
+        <span>{{ loading() ? 'Running...' : 'Run SQL' }}</span>
+      </button>
+    </form>
+
+    @if (errorMessage()) {
+      <div class="status-error">{{ errorMessage() }}</div>
+    }
+  </mat-card>
+
+  @if (result(); as runResult) {
+    @for (statementResult of runResult.results; track trackStatement($index, statementResult)) {
+      <mat-card appearance="outlined" class="page-card sql-result-card">
+        <h2>Statement {{ statementResult.statementNumber }}</h2>
+        <pre class="sql-statement">{{ statementResult.statement }}</pre>
+
+        @if (statementResult.error) {
+          <div class="status-error">{{ statementResult.error }}</div>
+        } @else {
+          @if (statementResult.truncated) {
+            <div class="status-error">
+              Showing the first {{ statementResult.rowCount }} rows only. Refine the query to reduce the result set.
+            </div>
+          }
+          <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                @for (column of statementResult.columns; track column) {
+                  <th>{{ column }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of statementResult.rows; track $index) {
+                <tr>
+                  @for (value of row; track $index) {
+                    <td>{{ value }}</td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+          </div>
+        }
+      </mat-card>
+    }
+  }
+</section>

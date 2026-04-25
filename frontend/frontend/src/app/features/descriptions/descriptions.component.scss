@@ -1,0 +1,136 @@
+:host {
+  display: block;
+  color: var(--meps-text);
+}
+
+.descriptions-shell {
+  display: grid;
+  gap: 20px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #d7e7e9;
+  color: var(--meps-bluegreen-dark);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 8px 0 0;
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+p {
+  max-width: 920px;
+  margin: 0;
+  color: var(--meps-text-muted);
+  line-height: 1.5;
+}
+
+.lookup-card {
+  padding: 20px;
+  border-radius: var(--meps-radius);
+  border: 1px solid var(--meps-border);
+  background: var(--meps-surface);
+  box-shadow: var(--meps-shadow);
+}
+
+.lookup-form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.primary-action {
+  min-width: 180px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 8px;
+}
+
+.error-banner {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--meps-danger-bg);
+  color: var(--meps-danger-text);
+  font-weight: 500;
+}
+
+.result-panel {
+  margin-top: 8px;
+  padding: 16px;
+  border-radius: 10px;
+  background: var(--meps-surface-muted);
+  border: 1px solid var(--meps-border);
+}
+
+.result-label {
+  font-weight: 700;
+}
+
+.result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.result-meta span {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #e6efef;
+  color: var(--meps-bluegreen-dark);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.result-description {
+  margin-top: 8px;
+  color: var(--meps-heading);
+  line-height: 1.6;
+}
+
+@media (max-width: 720px) {
+  .lookup-card {
+    padding: 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .primary-action,
+  .secondary-action {
+    width: 100%;
+  }
+}

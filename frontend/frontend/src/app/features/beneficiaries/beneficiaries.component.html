@@ -1,0 +1,144 @@
+<section class="beneficiaries-shell">
+  <div class="hero-panel">
+    <div class="eyebrow">Feature Slice 02</div>
+    <h1>Beneficiary Details</h1>
+    <p>
+      Look up a seeded demo beneficiary by BLK, MBI, HICN, SSN, or RRB-HICN
+      using the same response shape the desktop rewrite will keep for real MARx
+      environments later.
+    </p>
+  </div>
+
+  <mat-card class="lookup-card" appearance="outlined">
+    <form class="lookup-form" [formGroup]="form" (ngSubmit)="lookup()">
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="env-form-field">
+          <mat-label>Environment</mat-label>
+          <mat-select formControlName="environment">
+            @for (environment of environments(); track environment) {
+              <mat-option [value]="environment">{{ environment }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Bene ID Type</mat-label>
+          <mat-select formControlName="idType">
+            @for (idType of idTypes; track idType) {
+              <mat-option [value]="idType">{{ idType }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Bene ID</mat-label>
+        <input
+          matInput
+          formControlName="idValue"
+          placeholder="Example: 123123123, 123456789A, or 111223333"
+        />
+        @if (form.controls.idValue.invalid && form.controls.idValue.touched) {
+          <mat-error>Bene ID is required</mat-error>
+        }
+      </mat-form-field>
+
+      @if (errorMessage()) {
+        <div class="error-banner">{{ errorMessage() }}</div>
+      }
+
+      <div class="actions">
+        <button
+          type="button"
+          mat-button
+          class="secondary-action"
+          (click)="reset()"
+          [disabled]="loading()"
+        >
+          Reset
+        </button>
+
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          class="primary-action"
+          [disabled]="isSubmitDisabled"
+        >
+          @if (loading()) {
+            <mat-spinner diameter="18"></mat-spinner>
+          }
+          <span>{{ loading() ? 'Looking Up...' : 'Lookup Beneficiary' }}</span>
+        </button>
+      </div>
+    </form>
+
+    @if (result(); as lookupResult) {
+      <section class="result-panel">
+        <div class="result-label">Beneficiary Record</div>
+        <div class="result-meta">
+          <span>{{ lookupResult.environment }}</span>
+          <span>{{ lookupResult.idType }}</span>
+          <span>{{ lookupResult.idValue }}</span>
+        </div>
+
+        <div class="result-grid">
+          <div class="detail-card">
+            <div class="detail-label">Name</div>
+            <div class="detail-value">
+              {{ lookupResult.beneLastName }}, {{ lookupResult.beneFirstName }}
+              {{ lookupResult.middleName }}
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-label">BLK / BLPK</div>
+            <div class="detail-value">
+              {{ lookupResult.beneLinkKey }} / {{ lookupResult.beneLinkPartKey }}
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-label">MBI</div>
+            <div class="detail-value">{{ lookupResult.mbi || 'Not set' }}</div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-label">HICN</div>
+            <div class="detail-value">{{ lookupResult.hicn || 'Not set' }}</div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-label">SSN</div>
+            <div class="detail-value">{{ lookupResult.ssn || 'Not set' }}</div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-label">RRB-HICN</div>
+            <div class="detail-value">{{ lookupResult.rrbHicn || 'Not set' }}</div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-label">Birth / Death</div>
+            <div class="detail-value">
+              {{ lookupResult.beneBirthDate || 'Unknown' }} /
+              {{ lookupResult.beneDeathDate || 'Active' }}
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-label">Sex / Archive Status</div>
+            <div class="detail-value">
+              {{ lookupResult.beneSex }} / {{ lookupResult.archiveStatus }}
+            </div>
+          </div>
+
+          <div class="detail-card detail-card-wide">
+            <div class="detail-label">Last Update</div>
+            <div class="detail-value">{{ lookupResult.lastUpdateTs }}</div>
+          </div>
+        </div>
+      </section>
+    }
+  </mat-card>
+</section>

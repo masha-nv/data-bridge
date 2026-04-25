@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.placeholder-shell {
+  padding: 20px;
+  border: 1px solid var(--meps-border);
+  border-radius: var(--meps-radius);
+  background: var(--meps-surface);
+  box-shadow: var(--meps-shadow);
+}
+
+.placeholder-copy {
+  max-width: 720px;
+  color: var(--meps-text-muted);
+}

@@ -3,16 +3,21 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "copy-dbs": "cp ../backend/*.db . || echo 'No DB files to copy.'",
-    "clean-all": "rm -rf dist && rm -rf ../frontend/frontend/dist",
-    "build-angular-prod": "cd ../frontend/frontend && npm install && npm run build -- --configuration production",
-    "copy-dist": "mkdir -p dist/browser && cp -r ../frontend/frontend/dist/frontend/browser/* dist/browser/",
-    "build-backend": "cd ../backend && go build -o ../electron/backend main.go && cd ../electron",
-    "start": "electron .",
-    "build-and-start": "npm run clean-all && npm run build-angular-prod && npm run copy-dist && npm run build-backend && npm run copy-dbs && npm run start"
+    "copy-dbs": "node -e \"const fs=require('fs');const path=require('path');const src='../backend';const files=fs.existsSync(src)?fs.readdirSync(src).filter(f=>f.endsWith('.db')):[];if(!files.length){console.log('No DB files to copy.');process.exit(0);}for(const f of files){fs.copyFileSync(path.join(src,f),path.join('.',f));}\"",
+    "copy-backend-config": "node -e \"const fs=require('fs');const path=require('path');const src='../backend';const files=fs.existsSync(src)?fs.readdirSync(src).filter(f=>f.endsWith('.json')||f.endsWith('.pem')):[];if(!files.length){console.log('No backend config assets to copy.');process.exit(0);}for(const f of files){fs.copyFileSync(path.join(src,f),path.join('.',f));}\"",
+    "clean-all": "node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true});fs.rmSync('../frontend/frontend/dist',{recursive:true,force:true});\"",
+    "build-angular-prod": "cd ../frontend/frontend && npm run build -- --configuration production",
+    "copy-dist": "node -e \"const fs=require('fs');const path=require('path');const src='../frontend/frontend/dist/frontend/browser';const dst='dist/browser';fs.mkdirSync(dst,{recursive:true});if(!fs.existsSync(src)){console.error('Source dist not found: '+src);process.exit(1);}for(const entry of fs.readdirSync(src)){fs.cpSync(path.join(src,entry),path.join(dst,entry),{recursive:true,force:true});}\"",
+    "build-backend": "node -e \"const {spawnSync}=require('child_process');const fs=require('fs');const path=require('path');const hasOld=fs.existsSync('./backend')||fs.existsSync('./backend.exe');const goNames=process.platform==='win32'?['go.exe','go']:['go'];const candidates=[];if(process.env.GOROOT){for(const name of goNames){candidates.push(path.join(process.env.GOROOT,'bin',name));}}candidates.push(...goNames);let goCmd='';for(const candidate of candidates){const check=spawnSync(candidate,['version'],{stdio:'ignore',shell:false});if(check.status===0){goCmd=candidate;break;}}if(!goCmd){if(hasOld){console.log('Go not found; using existing backend binary.');process.exit(0);}console.error('Go is not installed and no backend binary is present. Install Go from https://go.dev/dl/ then rerun npm run build-and-start.');process.exit(1);}const out=process.platform==='win32'?'../electron/backend.exe':'../electron/backend';const build=spawnSync(goCmd,['build','-o',out,'.'],{cwd:'../backend',stdio:'inherit',shell:false});process.exit(build.status??1);\"",
+    "start": "node -e \"const fs=require('fs');const {spawn}=require('child_process');const cli='node_modules/electron/cli.js';if(!fs.existsSync(cli)){console.error('Electron is not installed locally. Fix TLS trust and run: npm install --save-dev electron');process.exit(1);}const child=spawn(process.execPath,[cli,'.'],{stdio:'inherit'});child.on('exit',code=>process.exit(code??0));\"",
+    "build": "npm run clean-all && npm run build-angular-prod && npm run copy-dist && npm run build-backend && npm run copy-dbs && npm run copy-backend-config && npm run start",
+    "build-and-start": "npm run build"
   },
   "devDependencies": {
-    "electron": "^29.0.0",
+    "electron": "^29.4.6",
     "electron-packager": "^17.1.1"
+  },
+  "dependencies": {
+    "go": "^3.0.1"
   }
 }

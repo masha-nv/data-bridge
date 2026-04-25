@@ -1,0 +1,71 @@
+<section class="login-shell">
+  <div class="login-backdrop"></div>
+
+  <mat-card class="login-card" appearance="outlined">
+    <div class="eyebrow">Desktop Access</div>
+    <h1>MARx Maintainer</h1>
+    <p class="intro">
+      Sign in with your database user ID to access description lookup,
+      beneficiary tools, DevOps utilities, and SQL runner workflows.
+    </p>
+
+    <form class="login-form" [formGroup]="form" (ngSubmit)="handleSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>User ID</mat-label>
+        <input matInput formControlName="userId" autocomplete="username" />
+        <mat-icon matSuffix>badge</mat-icon>
+        @if (userIdControl.invalid && userIdControl.touched) {
+          <mat-error>User ID is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+        />
+        <mat-icon matSuffix>lock</mat-icon>
+        @if (passwordControl.invalid && passwordControl.touched) {
+          <mat-error>Password is required</mat-error>
+        }
+      </mat-form-field>
+
+      @if (errorMessage()) {
+        <div class="error-banner">{{ errorMessage() }}</div>
+      }
+
+      <div class="actions">
+        <button
+          type="button"
+          mat-button
+          class="secondary-action"
+          (click)="resetForm()"
+          [disabled]="submitting()"
+        >
+          Clear
+        </button>
+
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          class="primary-action"
+          [disabled]="isSubmitDisabled"
+        >
+          @if (submitting()) {
+            <mat-spinner diameter="18"></mat-spinner>
+          }
+          <span>{{ submitting() ? 'Connecting...' : 'Sign In' }}</span>
+        </button>
+      </div>
+    </form>
+
+    <div class="footnote">
+      Demo mode uses mock credentials now and will later switch to real
+      environment-backed database authentication.
+    </div>
+  </mat-card>
+</section>

@@ -1,32 +1,128 @@
-.container {
+.app-shell-root {
+  min-height: 100vh;
+  width: 100%;
+  background: var(--meps-shell-bg);
+}
+
+.federal-banner {
+  min-height: 51px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  background: var(--meps-navy);
+  color: #fff;
+}
+
+.federal-banner__inner {
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
+  gap: 12px;
+  min-height: 51px;
 }
 
-.container-inner {
-  width: 70%;
+.federal-banner__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.action-btn {
+.federal-banner__text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.top-nav {
+  min-height: 45px;
+  background: linear-gradient(0deg, var(--meps-bluegreen-light), var(--meps-bluegreen-dark));
+  color: #fff;
+  box-shadow: none;
+}
+
+.top-nav__inner {
   display: flex;
-  margin-top: 3rem;
+  align-items: center;
   justify-content: space-between;
+  gap: 16px;
+  min-height: 45px;
 }
 
-.search-results {
+.top-nav__brand-block {
   display: flex;
-  gap: 5rem;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
 }
 
-.flex-col {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
+.top-nav__product {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.search-results-title {
-  margin: 0 0 1rem 1rem;
+.top-nav__brand {
+  font-size: 1rem;
   font-weight: 600;
+}
+
+.top-nav__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: auto;
+  gap: 4px;
+}
+
+.top-nav__link,
+.top-nav__trigger {
+  color: #fff !important;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.top-nav__link.active {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.top-nav__context {
+  margin-left: auto;
+  font-size: 0.88rem;
+  font-weight: 500;
+  opacity: 0.92;
+}
+
+.app-shell-content {
+  padding: 24px 0 32px;
+}
+
+@media (max-width: 800px) {
+  .federal-banner__inner,
+  .top-nav__inner {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  .top-nav {
+    height: auto;
+  }
+
+  .top-nav__links {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+
+  .top-nav__context {
+    margin-left: 0;
+  }
+
+  .app-shell-content {
+    padding: 16px 0 24px;
+  }
 }
