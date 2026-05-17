@@ -1,6 +1,5 @@
 <section class="descriptions-shell">
   <div class="hero-panel">
-    <div class="eyebrow">Feature Slice 01</div>
     <h1>Descriptions Lookup</h1>
     <!-- <p>
       Query MARx transaction reply codes and PW-R reply codes against the demo
@@ -64,9 +63,7 @@
           class="primary-action"
           [disabled]="isSubmitDisabled"
         >
-          @if (loading()) {
-            <mat-spinner diameter="18"></mat-spinner>
-          }
+         
           <span>{{ loading() ? 'Looking Up...' : 'Lookup Description' }}</span>
         </button>
       </div>

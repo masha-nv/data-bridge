@@ -469,6 +469,11 @@ func registerLegacyRoutes() {
 func registerMarxRoutes() {
 	http.HandleFunc("/api/marx/descriptions/lookup", enableCORS(descriptionsLookupHandler))
 	http.HandleFunc("/api/marx/beneficiaries/lookup", enableCORS(beneficiaryLookupHandler))
+	http.HandleFunc("/api/marx/beneficiaries/copy", enableCORS(beneCopyHandler))
+	http.HandleFunc("/api/marx/beneficiaries/copy/movedata", enableCORS(beneCopyMovedataHandler))
+	http.HandleFunc("/api/marx/beneficiaries/copy/status", enableCORS(beneCopyStatusHandler))
+	http.HandleFunc("/api/marx/beneficiaries/copy/history", enableCORS(beneCopyHistoryHandler))
+	http.HandleFunc("/api/marx/beneficiaries/copy/history/", enableCORS(beneCopyHistoryDetailHandler))
 	http.HandleFunc("/api/marx/devops/jobs", enableCORS(devopsJobsHandler))
 	http.HandleFunc("/api/marx/devops/restart-jobs", enableCORS(restartFailedJobsHandler))
 	http.HandleFunc("/api/marx/devops/mark-jobs-complete", enableCORS(markJobsCompleteHandler))
@@ -490,6 +495,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	if err := initBeneCopyHistoryStore(); err != nil {
+		log.Fatal(err)
+	}
+
+	startBeneCopyWorker()
 	registerRoutes()
 	log.Printf("Go backend running on %s in %s mode", backendAddr, getAppMode())
 	log.Fatal(http.ListenAndServe(backendAddr, nil))

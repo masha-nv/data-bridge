@@ -311,3 +311,22 @@ func getDatabaseAdapter() databaseAdapter {
 		return demoSQLiteAdapter{}
 	}
 }
+
+func openDatabaseWithCredentials(environment, databaseName, userID, password string) (*sql.DB, error) {
+	definition, err := getDatabaseDefinition(environment, databaseName)
+	if err != nil {
+		return nil, err
+	}
+
+	switch getAppMode() {
+	case appModeDemo:
+		return demoSQLiteAdapter{}.Open(environment, databaseName)
+	case appModeReal:
+		if strings.TrimSpace(userID) == "" || strings.TrimSpace(password) == "" {
+			return nil, fmt.Errorf("no captured real database credentials; log in first")
+		}
+		return openConnectionWithDefinition(userID, password, definition)
+	default:
+		return demoSQLiteAdapter{}.Open(environment, databaseName)
+	}
+}

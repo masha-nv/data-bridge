@@ -96,8 +96,19 @@ export class AppComponent {
     },
     {
       label: 'Bene Download',
-      path: '/app/bene-download',
-      enabled: false,
+      enabled: true,
+      children: [
+        {
+          label: 'Current Bene Copy',
+          path: '/app/bene-download',
+          enabled: true,
+        },
+        {
+          label: 'Movedata Bene Copy',
+          path: '/app/bene-download-movedata',
+          enabled: true,
+        },
+      ],
     },
     {
       label: 'Change Password',

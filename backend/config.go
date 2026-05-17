@@ -15,6 +15,7 @@ const (
 	defaultAppConfigFileName = "backend-config.json"
 	defaultDBConfigFileName  = "backend-db-parms.json"
 	databaseNameMARx         = "MARx"
+	databaseNamePWA          = "PWA"
 	databaseNameBatch        = "Batch"
 	appModeDemo              = "demo"
 	appModeReal              = "real"
@@ -167,18 +168,22 @@ func defaultDatabaseInventory() databaseInventory {
 	return databaseInventory{
 		"Dev2": {
 			databaseNameMARx:  {DBDriver: sqliteDriverName, DBFile: "dev2.db"},
+			databaseNamePWA:   {DBDriver: sqliteDriverName, DBFile: "dev2.db"},
 			databaseNameBatch: {DBDriver: sqliteDriverName, DBFile: "dev2.db"},
 		},
 		"Test2": {
 			databaseNameMARx:  {DBDriver: sqliteDriverName, DBFile: "test2.db"},
+			databaseNamePWA:   {DBDriver: sqliteDriverName, DBFile: "test2.db"},
 			databaseNameBatch: {DBDriver: sqliteDriverName, DBFile: "test2.db"},
 		},
 		"Impl2": {
 			databaseNameMARx:  {DBDriver: sqliteDriverName, DBFile: "impl2.db"},
+			databaseNamePWA:   {DBDriver: sqliteDriverName, DBFile: "impl2.db"},
 			databaseNameBatch: {DBDriver: sqliteDriverName, DBFile: "impl2.db"},
 		},
 		"Prod2": {
 			databaseNameMARx:  {DBDriver: sqliteDriverName, DBFile: "prod2.db"},
+			databaseNamePWA:   {DBDriver: sqliteDriverName, DBFile: "prod2.db"},
 			databaseNameBatch: {DBDriver: sqliteDriverName, DBFile: "prod2.db"},
 		},
 	}

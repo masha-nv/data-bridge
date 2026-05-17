@@ -23,9 +23,7 @@
       </mat-form-field>
 
       <button type="submit" mat-flat-button color="primary" [disabled]="isSubmitDisabled">
-        @if (loading()) {
-          <mat-spinner diameter="18"></mat-spinner>
-        }
+        
         <span>{{ loading() ? 'Running...' : 'Run SQL' }}</span>
       </button>
     </form>

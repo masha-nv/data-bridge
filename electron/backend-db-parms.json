@@ -8,6 +8,14 @@
 			"dbSchema": "marx_main,marx_reference,marx_history,marx_xref,marx_udf,aws_lambda,public",
 			"dbParams": ""
 		},
+		"PWA": {
+			"dbDriver": "mysql",
+			"dbHost": "",
+			"dbPort": "3306",
+			"dbName": "",
+			"dbSchema": "",
+			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
+		},
 		"Batch": {
 			"dbDriver": "mysql",
 			"dbHost": "max-dev-batch-db.cr5uzdpelfak.us-east-1.rds.amazonaws.com",
@@ -25,6 +33,14 @@
 			"dbName": "marxtestdb",
 			"dbSchema": "marx_main,marx_reference,marx_history,marx_xref,marx_udf,aws_lambda,public",
 			"dbParams": ""
+		},
+		"PWA": {
+			"dbDriver": "mysql",
+			"dbHost": "",
+			"dbPort": "3306",
+			"dbName": "",
+			"dbSchema": "",
+			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
 		},
 		"Batch": {
 			"dbDriver": "mysql",
@@ -44,6 +60,14 @@
 			"dbSchema": "marx_main,marx_reference,marx_history,marx_xref,marx_udf,aws_lambda,public",
 			"dbParams": ""
 		},
+		"PWA": {
+			"dbDriver": "mysql",
+			"dbHost": "",
+			"dbPort": "3306",
+			"dbName": "",
+			"dbSchema": "",
+			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
+		},
 		"Batch": {
 			"dbDriver": "mysql",
 			"dbHost": "max-impl-batch-db.ccnuvswtppio.us-east-1.rds.amazonaws.com",
@@ -58,9 +82,17 @@
 			"dbDriver": "postgres",
 			"dbHost": "marx-prod2-mcs-db-cluster.cluster-cdkvlqcknkix.us-east-1.rds.amazonaws.com",
 			"dbPort": "5432",
-			"dbName": "marxprod2db",
+			"dbName": "marxproddb",
 			"dbSchema": "marx_main,marx_reference,marx_history,marx_xref,marx_udf,aws_lambda,public",
 			"dbParams": ""
+		},
+		"PWA": {
+			"dbDriver": "mysql",
+			"dbHost": "",
+			"dbPort": "3306",
+			"dbName": "",
+			"dbSchema": "",
+			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
 		},
 		"Batch": {
 			"dbDriver": "mysql",

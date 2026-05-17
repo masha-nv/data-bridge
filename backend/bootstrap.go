@@ -37,6 +37,6 @@ func backendStatusHandler(w http.ResponseWriter, _ *http.Request) {
 			"/api/rows",
 			"/api/columls",
 		},
-		MarxRoutesEnabled: false,
+		MarxRoutesEnabled: true,
 	})
 }

@@ -55,17 +55,10 @@
           class="primary-action"
           [disabled]="isSubmitDisabled"
         >
-          @if (submitting()) {
-            <mat-spinner diameter="18"></mat-spinner>
-          }
+         
           <span>{{ submitting() ? 'Connecting...' : 'Sign In' }}</span>
         </button>
       </div>
     </form>
-
-    <div class="footnote">
-      Demo mode uses mock credentials now and will later switch to real
-      environment-backed database authentication.
-    </div>
   </mat-card>
 </section>

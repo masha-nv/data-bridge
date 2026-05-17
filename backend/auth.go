@@ -57,10 +57,20 @@ func getDemoEnvironmentConnections() []environmentConnectionState {
 
 	connections := make([]environmentConnectionState, 0, len(envs))
 	for _, env := range envs {
-		databases := []databaseConnectionState{{
-			Name:      "demo-sqlite",
-			Connected: true,
-		}}
+		databases := []databaseConnectionState{
+			{
+				Name:      databaseNameMARx,
+				Connected: true,
+			},
+			{
+				Name:      databaseNamePWA,
+				Connected: true,
+			},
+			{
+				Name:      databaseNameBatch,
+				Connected: true,
+			},
+		}
 		connections = append(connections, environmentConnectionState{
 			Environment: env,
 			Databases:   databases,
@@ -87,8 +97,8 @@ func getRealEnvironmentConnections(userID, password string) ([]environmentConnec
 		go func(index int, env string) {
 			defer waitGroup.Done()
 
-			databases := make([]databaseConnectionState, 0, 2)
-			for _, databaseName := range []string{databaseNameMARx, databaseNameBatch} {
+			databases := make([]databaseConnectionState, 0, 3)
+			for _, databaseName := range []string{databaseNameMARx, databaseNamePWA, databaseNameBatch} {
 				definition, err := getDatabaseDefinition(env, databaseName)
 				if err != nil {
 					databases = append(databases, databaseConnectionState{Name: databaseName, Connected: false})
