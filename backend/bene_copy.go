@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	beneCopyExecutionTimeout = 2 * time.Hour
+	beneCopyExecutionTimeout = 12 * time.Hour
 )
 
 type beneCopyRequest struct {
@@ -74,10 +74,19 @@ func beneCopyHandler(w http.ResponseWriter, r *http.Request) {
 	req.TargetEnvironment = strings.TrimSpace(req.TargetEnvironment)
 	req.BeneLinkPartKey = strings.TrimSpace(req.BeneLinkPartKey)
 	req.BeneLinkKey = strings.TrimSpace(req.BeneLinkKey)
-	req.Engine = normalizeBeneCopyEngine(req.Engine)
+	req.Engine = beneCopyEngineMarxMovedata
 
-	if req.SourceEnvironment == "" || req.TargetEnvironment == "" || req.BeneLinkKey == "" {
-		http.Error(w, "sourceEnvironment, targetEnvironment, and beneLinkKey are required", http.StatusBadRequest)
+	if req.SourceEnvironment == "" || req.TargetEnvironment == "" || req.BeneLinkPartKey == "" || req.BeneLinkKey == "" {
+		http.Error(w, "sourceEnvironment, targetEnvironment, beneLinkPartKey, and beneLinkKey are required", http.StatusBadRequest)
+		return
+	}
+
+	if _, err := strconv.ParseInt(req.BeneLinkPartKey, 10, 16); err != nil {
+		http.Error(w, fmt.Sprintf("beneLinkPartKey must be numeric: %v", err), http.StatusBadRequest)
+		return
+	}
+	if _, err := strconv.ParseInt(req.BeneLinkKey, 10, 32); err != nil {
+		http.Error(w, fmt.Sprintf("beneLinkKey must be numeric: %v", err), http.StatusBadRequest)
 		return
 	}
 
@@ -96,6 +105,11 @@ func beneCopyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := validateMovedataPWAEnvironments(req.SourceEnvironment, req.TargetEnvironment); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	authContext, err := buildBeneCopyJobAuthContext()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -106,6 +120,23 @@ func beneCopyHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusAccepted)
 	writeJSON(w, buildBeneCopyJobSubmissionResponse(job))
+}
+
+func validateMovedataPWAEnvironments(sourceEnvironment, targetEnvironment string) error {
+	for _, environment := range []string{sourceEnvironment, targetEnvironment} {
+		definition, err := getDatabaseDefinition(environment, databaseNamePWA)
+		if err != nil {
+			return err
+		}
+
+		if getAppMode() == appModeReal {
+			if strings.TrimSpace(definition.DBDriver) == "" || strings.TrimSpace(definition.DBHost) == "" || strings.TrimSpace(definition.DBName) == "" {
+				return fmt.Errorf("PWA database is not fully configured for environment %s", environment)
+			}
+		}
+	}
+
+	return nil
 }
 
 func validateBeneCopyTargetEnvironment(targetEnvironment string) error {
@@ -207,7 +238,7 @@ func appendBeneCopyTraversalItem(items *[]beneCopyTraversalItem, node beneCopyTa
 	}
 }
 
-func buildBeneCopyFilterBuilder(definition beneCopyTableDefinition, beneLinkKey int64, parentFilterBuilder beneCopyFilterBuilder) beneCopyFilterBuilder {
+func buildBeneCopyFilterBuilder(definition beneCopyTableDefinition, beneLinkPartKey int64, beneLinkKey int64, parentFilterBuilder beneCopyFilterBuilder) beneCopyFilterBuilder {
 	if definition.ParentTable != nil && parentFilterBuilder != nil {
 		parentTable := *definition.ParentTable
 		return func(alias string, nextAliasIndex *int) (string, []any, error) {
@@ -230,6 +261,30 @@ func buildBeneCopyFilterBuilder(definition beneCopyTableDefinition, beneLinkKey 
 			}
 
 			return fmt.Sprintf("EXISTS (SELECT 1 FROM %s %s WHERE %s)", parentTable.TableName, parentAlias, strings.Join(conditions, " AND ")), parentArgs, nil
+		}
+	}
+
+	if definition.RootFilterColumns != nil {
+		rootFilterColumns := *definition.RootFilterColumns
+		return func(alias string, nextAliasIndex *int) (string, []any, error) {
+			conditions := make([]string, 0, 2)
+			args := make([]any, 0, 2)
+
+			if strings.TrimSpace(rootFilterColumns.BeneLinkPartKey) != "" {
+				conditions = append(conditions, fmt.Sprintf("%s.%s = ?", alias, rootFilterColumns.BeneLinkPartKey))
+				args = append(args, beneLinkPartKey)
+			}
+
+			if strings.TrimSpace(rootFilterColumns.BeneLinkKey) != "" {
+				conditions = append(conditions, fmt.Sprintf("%s.%s = ?", alias, rootFilterColumns.BeneLinkKey))
+				args = append(args, beneLinkKey)
+			}
+
+			if len(conditions) == 0 {
+				return "", nil, fmt.Errorf("table %s defines RootFilterColumns without any column names", definition.TableName)
+			}
+
+			return strings.Join(conditions, " AND "), args, nil
 		}
 	}
 
@@ -297,7 +352,7 @@ func copyBeneCopyMARxRows(ctx context.Context, jobID, sourceEnvironment, targetE
 
 func copyBeneCopyRowsForNode(ctx context.Context, jobID string, tx *sql.Tx, sourceDB *sql.DB, sourceEnvironment, targetEnvironment string, node beneCopyTableNode, beneLinkKey int64, parentFilterBuilder beneCopyFilterBuilder, result *beneCopyExecutionResult, progress beneCopyProgressFunc) error {
 	definition := node.Table
-	currentFilterBuilder := buildBeneCopyFilterBuilder(definition, beneLinkKey, parentFilterBuilder)
+		currentFilterBuilder := buildBeneCopyFilterBuilder(definition, 0, beneLinkKey, parentFilterBuilder)
 	if currentFilterBuilder != nil {
 		tableStart := time.Now()
 		persistBeneCopyTableStarted(jobID, definition.TableName, tableStart)

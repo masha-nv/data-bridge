@@ -45,6 +45,7 @@ export interface BeneCopyJobRequest {
 
 export interface BeneCopyMovedataJobRequest extends BeneCopyJobRequest {
   beneLinkPartKey: string;
+  engine?: 'marx-movedata';
 }
 
 export interface BeneCopyTableHistoryEntry {
@@ -72,17 +73,13 @@ export class BeneCopyService {
   private readonly httpClient = inject(HttpClient);
   private readonly environmentService = inject(EnvironmentService);
 
-  submitJob(request: BeneCopyJobRequest): Observable<BeneCopyJobSubmissionResponse> {
-    return this.httpClient.post<BeneCopyJobSubmissionResponse>(
-      this.environmentService.getApiUrl('/api/marx/beneficiaries/copy'),
-      request,
-    );
-  }
-
   submitMovedataJob(request: BeneCopyMovedataJobRequest): Observable<BeneCopyJobSubmissionResponse> {
     return this.httpClient.post<BeneCopyJobSubmissionResponse>(
-      this.environmentService.getApiUrl('/api/marx/beneficiaries/copy/movedata'),
-      request,
+      this.environmentService.getApiUrl('/api/marx/beneficiaries/copy'),
+      {
+        ...request,
+        engine: 'marx-movedata',
+      },
     );
   }
 
@@ -92,7 +89,7 @@ export class BeneCopyService {
     );
   }
 
-  getHistory(limit = 20, engine = 'legacy'): Observable<BeneCopyHistoryListResponse> {
+  getHistory(limit = 20, engine = 'marx-movedata'): Observable<BeneCopyHistoryListResponse> {
     return this.httpClient.get<BeneCopyHistoryListResponse>(
       this.environmentService.getApiUrl(`/api/marx/beneficiaries/copy/history?limit=${encodeURIComponent(String(limit))}&engine=${encodeURIComponent(engine)}`),
     );

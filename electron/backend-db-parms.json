@@ -10,9 +10,9 @@
 		},
 		"PWA": {
 			"dbDriver": "mysql",
-			"dbHost": "",
+			"dbHost": "marx-dev2-pwa-db.cluster-cr5uzdpelfak.us-east-1.rds.amazonaws.com",
 			"dbPort": "3306",
-			"dbName": "",
+			"dbName": "premium_withholding_accounting",
 			"dbSchema": "",
 			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
 		},
@@ -36,9 +36,9 @@
 		},
 		"PWA": {
 			"dbDriver": "mysql",
-			"dbHost": "",
+			"dbHost": "marx-test2-pwa-db-cluster.cluster-cwhgeylufzm0.us-east-1.rds.amazonaws.com",
 			"dbPort": "3306",
-			"dbName": "",
+			"dbName": "premium_withholding_accounting",
 			"dbSchema": "",
 			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
 		},
@@ -62,9 +62,9 @@
 		},
 		"PWA": {
 			"dbDriver": "mysql",
-			"dbHost": "",
+			"dbHost": "marx-impl2-pwa-db-cluster.cluster-ccnuvswtppio.us-east-1.rds.amazonaws.com",
 			"dbPort": "3306",
-			"dbName": "",
+			"dbName": "premium_withholding_accounting",
 			"dbSchema": "",
 			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
 		},
@@ -88,9 +88,9 @@
 		},
 		"PWA": {
 			"dbDriver": "mysql",
-			"dbHost": "",
+			"dbHost": "marx-prod2-pwa-db-cluster.cluster-cdkvlqcknkix.us-east-1.rds.amazonaws.com",
 			"dbPort": "3306",
-			"dbName": "",
+			"dbName": "premium_withholding_accounting",
 			"dbSchema": "",
 			"dbParams": "interpolateParams=true&parseTime=true&multiStatements=true"
 		},

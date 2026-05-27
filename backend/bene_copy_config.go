@@ -24,8 +24,14 @@ type beneCopyTableNode struct {
 type beneCopyTableDefinition struct {
 	TableName          string                   `json:"TableName"`
 	TableHasBeneLinkKey bool                    `json:"TableHasBeneLinkKey"`
+	RootFilterColumns  *beneCopyRootFilterColumns `json:"RootFilterColumns,omitempty"`
 	ParentTable        *beneCopyParentTable     `json:"ParentTable,omitempty"`
 	Tables             []beneCopyTableNode      `json:"Tables,omitempty"`
+}
+
+type beneCopyRootFilterColumns struct {
+	BeneLinkPartKey string `json:"BeneLinkPartKey,omitempty"`
+	BeneLinkKey     string `json:"BeneLinkKey,omitempty"`
 }
 
 type beneCopyParentTable struct {

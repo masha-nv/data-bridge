@@ -1,0 +1,547 @@
+{
+  "Tables": [
+    {
+      "Table": {
+        "TableName": "mcs_agncy_rqst_trkng_bene",
+        "TableHasBeneLinkKey": true,
+        "Tables": [
+          {
+            "Table": {
+              "TableName": "mcs_agncy_rqst_trkng_stus",
+              "TableHasBeneLinkKey": true,
+              "Tables": [
+                {
+                  "Table": {
+                    "TableName": "mcs_agncy_rqst_trkng_prm_dtl",
+                    "TableHasBeneLinkKey": true
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_request",
+        "TableHasBeneLinkKey": true,
+        "Tables": [
+          {
+            "Table": {
+              "TableName": "mcs_ui_cara_chg",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_cara_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_posde_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_ui_posde_chg",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_msa_cmltv_pymt",
+              "TableHasBeneLinkKey": true
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_mmp_rqst",
+              "TableHasBeneLinkKey": true
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_bene_prsnl_info_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_bene_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              },
+              "Tables": [
+                {
+                  "Table": {
+                    "TableName": "mcs_bene_rqst_addr",
+                    "TableHasBeneLinkKey": false,
+                    "ParentTable": {
+                      "TableName": "mcs_request",
+                      "Columns": [
+                        {
+                          "NameParent": "RQST_ID",
+                          "NameChild": "RQST_ID"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "Table": {
+                    "TableName": "mcs_bene_rqst_prd",
+                    "TableHasBeneLinkKey": false,
+                    "ParentTable": {
+                      "TableName": "mcs_request",
+                      "Columns": [
+                        {
+                          "NameParent": "RQST_ID",
+                          "NameChild": "RQST_ID"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_disenroll_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_enroll_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_ic_model_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_mco_cctn_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_pbp_chg_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_plan_adr_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_plan_chg_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_plan_trans",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_rate_calc_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_rqst_adj_ovrd",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_rqst_excptn_tbl",
+              "TableHasBeneLinkKey": true
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_rqst_tran_rply",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_rqst_xref",
+              "TableHasBeneLinkKey": true
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_srvc_area_rqst",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_ui_enrlmt_chg",
+              "TableHasBeneLinkKey": false,
+              "ParentTable": {
+                "TableName": "mcs_request",
+                "Columns": [
+                  {
+                    "NameParent": "RQST_ID",
+                    "NameChild": "RQST_ID"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_action",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_action_hstry",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_ped_ssa_enrlmt_prd",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_ped_rrb_enrlmt_prd",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_petsrv_rqst",
+        "TableHasBeneLinkKey": true,
+        "Tables": [
+          {
+            "Table": {
+              "TableName": "mcs_petsrv_rqst_log",
+              "TableHasBeneLinkKey": true
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_petsrv_prm_dtl",
+              "TableHasBeneLinkKey": true
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_petsrv_rqst_prd",
+              "TableHasBeneLinkKey": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_mmp_bene",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_bene_stus_prd",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_bene_demo_fctr",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_bene_jrsdctn",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_brokr_compnstn",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_cer_rqst_trkng",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_mm_pymt_prfl",
+        "TableHasBeneLinkKey": true,
+        "Tables": [
+          {
+            "Table": {
+              "TableName": "mcs_mm_clcltn_pymt",
+              "TableHasBeneLinkKey": true
+            }
+          },
+          {
+            "Table": {
+              "TableName": "mcs_mm_pymt_adjstmt",
+              "TableHasBeneLinkKey": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_mnthly_lep_pymt",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_mnthly_pymt",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_rcon_bene_cpnn",
+        "TableHasBeneLinkKey": true,
+        "Tables": [
+          {
+            "Table": {
+              "TableName": "mcs_rcon_bene_fctr",
+              "TableHasBeneLinkKey": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_rcon_bene_cpnn_1",
+        "TableHasBeneLinkKey": true,
+        "Tables": [
+          {
+            "Table": {
+              "TableName": "mcs_rcon_bene_fctr_1",
+              "TableHasBeneLinkKey": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_rcon_bene_cpnn_2",
+        "TableHasBeneLinkKey": true,
+        "Tables": [
+          {
+            "Table": {
+              "TableName": "mcs_rcon_bene_fctr_2",
+              "TableHasBeneLinkKey": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Table": {
+        "TableName": "mcs_rcon_fctr_audt",
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "marx_enrollment_additional_info",
+        "TableHasBeneLinkKey": true
+      }
+    }
+  ]
+}

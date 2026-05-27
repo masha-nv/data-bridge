@@ -1,0 +1,86 @@
+{
+  "Tables": [
+    {
+      "Table": {
+        "TableName": "aggregate_reconciliation",
+		"RootFilterColumns": {
+		  "BeneLinkPartKey": "beneficiary_partition",
+		  "BeneLinkKey": "beneficiary_key"
+		},
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "collected_premium",
+		"RootFilterColumns": {
+		  "BeneLinkPartKey": "beneficiary_partition",
+		  "BeneLinkKey": "beneficiary_key"
+		},
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "death_date_notifications",
+		"RootFilterColumns": {
+		  "BeneLinkPartKey": "beneficiary_partition",
+		  "BeneLinkKey": "beneficiary_key"
+		},
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "expected_premium",
+		"RootFilterColumns": {
+		  "BeneLinkPartKey": "beneficiary_partition",
+		  "BeneLinkKey": "beneficiary_key"
+		},
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "payment_discrepancy",
+		"RootFilterColumns": {
+		  "BeneLinkPartKey": "beneficiary_partition",
+		  "BeneLinkKey": "beneficiary_key"
+		},
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "premium_payment",
+		"RootFilterColumns": {
+		  "BeneLinkPartKey": "beneficiary_partition",
+		  "BeneLinkKey": "beneficiary_key"
+		},
+        "TableHasBeneLinkKey": true
+      }
+    },
+    {
+      "Table": {
+        "TableName": "ssa_premium_reconciliation",
+		"RootFilterColumns": {
+		  "BeneLinkPartKey": "beneficiary_partition",
+		  "BeneLinkKey": "beneficiary_key"
+		},
+        "TableHasBeneLinkKey": true,
+        "Tables": [
+          {
+            "Table": {
+              "TableName": "ssa_premium_reconciliation_annotations",
+		      "RootFilterColumns": {
+		        "BeneLinkPartKey": "beneficiary_partition",
+		        "BeneLinkKey": "beneficiary_key"
+		      },
+              "TableHasBeneLinkKey": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -150,7 +150,10 @@ export class BeneCopyMovedataComponent implements OnInit, OnDestroy {
     this.job.set(null);
 
     try {
-      const response = await firstValueFrom(this.beneCopyService.submitMovedataJob(this.form.getRawValue()));
+      const response = await firstValueFrom(this.beneCopyService.submitMovedataJob({
+        ...this.form.getRawValue(),
+        engine: 'marx-movedata',
+      }));
       this.job.set(this.buildInitialJobStatus(response));
       this.startPolling(response.jobId);
     } catch (error: unknown) {
@@ -245,7 +248,7 @@ export class BeneCopyMovedataComponent implements OnInit, OnDestroy {
       }
     }
 
-    return 'Unable to run movedata bene copy right now. Try again.';
+    return 'Unable to run bene copy right now. Try again.';
   }
 
   private buildInitialJobStatus(response: BeneCopyJobSubmissionResponse): BeneCopyJobStatusResponse {
@@ -309,7 +312,7 @@ export class BeneCopyMovedataComponent implements OnInit, OnDestroy {
     this.historyErrorMessage.set('');
 
     try {
-      const response = await firstValueFrom(this.beneCopyService.getHistory(this.historyPageSize, 'movedata'));
+      const response = await firstValueFrom(this.beneCopyService.getHistory(this.historyPageSize, 'marx-movedata'));
       this.recentJobs.set(response.jobs);
 
       const jobIdToLoad = preferredJobId ?? this.selectedHistoryJobId() ?? response.jobs[0]?.jobId ?? null;

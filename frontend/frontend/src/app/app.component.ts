@@ -59,27 +59,8 @@ export class AppComponent {
       enabled: true,
       children: [
         {
-          label: 'Active Jobs',
+          label: 'Jobs',
           path: '/app/devops',
-          queryParams: { tab: 'active' },
-          enabled: true,
-        },
-        {
-          label: 'Completed Jobs',
-          path: '/app/devops',
-          queryParams: { tab: 'completed' },
-          enabled: true,
-        },
-        {
-          label: 'Restart Failed Job',
-          path: '/app/devops',
-          queryParams: { tab: 'restart-failed-job' },
-          enabled: true,
-        },
-        {
-          label: 'Mark Job Complete',
-          path: '/app/devops',
-          queryParams: { tab: 'mark-job-complete' },
           enabled: true,
         },
         {
@@ -95,20 +76,9 @@ export class AppComponent {
       enabled: true,
     },
     {
-      label: 'Bene Download',
+      label: 'Bene Copy',
+      path: '/app/bene-download-movedata',
       enabled: true,
-      children: [
-        {
-          label: 'Current Bene Copy',
-          path: '/app/bene-download',
-          enabled: true,
-        },
-        {
-          label: 'Movedata Bene Copy',
-          path: '/app/bene-download-movedata',
-          enabled: true,
-        },
-      ],
     },
     {
       label: 'Change Password',

@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { BeneCopyComponent } from './features/bene-copy/bene-copy.component';
 import { BeneCopyMovedataComponent } from './features/bene-copy-movedata/bene-copy-movedata.component';
 import { BeneficiariesComponent } from './features/beneficiaries/beneficiaries.component';
 import { DevopsComponent } from './features/devops/devops.component';
@@ -73,22 +72,12 @@ export const routes: Routes = [
 				},
 			},
 			{
-				path: 'bene-download',
-				title: 'Bene Download',
-				component: BeneCopyComponent,
-				data: {
-					feature: 'bene-download',
-					title: 'Bene Download',
-					enabled: true,
-				},
-			},
-			{
 				path: 'bene-download-movedata',
-				title: 'Bene Download Movedata',
+				title: 'Bene Copy',
 				component: BeneCopyMovedataComponent,
 				data: {
 					feature: 'bene-download-movedata',
-					title: 'Bene Download Movedata',
+					title: 'Bene Copy',
 					enabled: true,
 				},
 			},

@@ -14,8 +14,7 @@ import (
 type beneCopyJobState string
 
 const (
-	beneCopyEngineLegacy   = "legacy"
-	beneCopyEngineMovedata = "movedata"
+	beneCopyEngineMarxMovedata  = "marx-movedata"
 
 	beneCopyJobStateQueued    beneCopyJobState = "queued"
 	beneCopyJobStateRunning   beneCopyJobState = "running"
@@ -211,18 +210,7 @@ func processBeneCopyJob(job beneCopyJob) {
 		result beneCopyExecutionResult
 		err    error
 	)
-	switch normalizeBeneCopyEngine(job.Engine) {
-	case beneCopyEngineMovedata:
-		result, err = copyBeneCopyMovedataRows(jobContext, job.ID, job.SourceEnvironment, job.TargetEnvironment, job.BeneLinkPartKey, job.BeneLinkKey, progress, job.AuthContext)
-	default:
-		marxConfig, loadErr := loadBeneCopyMARxConfig()
-		if loadErr != nil {
-			log.Printf("bene copy job failed before execution: jobId=%s duration=%s err=%v", job.ID, time.Since(jobStart).Round(time.Millisecond), loadErr)
-			failBeneCopyJob(job.ID, fmt.Sprintf("load MARx bene copy config: %v", loadErr))
-			return
-		}
-		result, err = copyBeneCopyMARxRows(jobContext, job.ID, job.SourceEnvironment, job.TargetEnvironment, job.BeneLinkKey, marxConfig, progress, job.AuthContext)
-	}
+	result, err = copyBeneCopyMarxMovedataRows(jobContext, job.ID, job.SourceEnvironment, job.TargetEnvironment, job.BeneLinkPartKey, job.BeneLinkKey, progress, job.AuthContext)
 	if err != nil {
 		log.Printf("bene copy job failed: jobId=%s duration=%s err=%v", job.ID, time.Since(jobStart).Round(time.Millisecond), err)
 		failBeneCopyJob(job.ID, err.Error())
@@ -295,25 +283,15 @@ func beneCopyStatusHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func normalizeBeneCopyEngine(engine string) string {
-	trimmedEngine := strings.ToLower(strings.TrimSpace(engine))
-	if trimmedEngine == beneCopyEngineMovedata {
-		return beneCopyEngineMovedata
-	}
-	return beneCopyEngineLegacy
+	return beneCopyEngineMarxMovedata
 }
 
 func beneCopyQueuedMessage(engine string) string {
-	if normalizeBeneCopyEngine(engine) == beneCopyEngineMovedata {
-		return "movedata bene copy job queued"
-	}
-	return "bene copy job queued"
+	return "marx-move-data bene copy job queued"
 }
 
 func beneCopyRunningMessage(engine string) string {
-	if normalizeBeneCopyEngine(engine) == beneCopyEngineMovedata {
-		return "movedata bene copy job running"
-	}
-	return "bene copy job running"
+	return "marx-move-data bene copy job running"
 }
 
 func buildBeneCopyJobSubmissionResponse(job beneCopyJob) beneCopyJobSubmissionResponse {
