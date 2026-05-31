@@ -1,0 +1,151 @@
+<section class="app-page-shell tester-utilities-shell">
+  <div class="app-page-intro">
+    <div class="page-eyebrow">Testing</div>
+    <h1>Tester Utilities</h1>
+    <p>Tester-facing tools for identifying candidate beneficiaries and managing shared bene locks.</p>
+  </div>
+
+  <mat-card appearance="outlined" class="page-card tester-utilities-toolbar-card">
+    <p>
+      This page now uses the shared feature shell and tab structure. The tab content stays intentionally
+      light until the specific tester utility workflows are added in later steps.
+    </p>
+  </mat-card>
+
+  <mat-tab-group
+    class="tester-utilities-tabs"
+    [selectedIndex]="selectedTabIndex()"
+    (selectedIndexChange)="handleTabChange($event)">
+    <mat-tab label="Identified Benes">
+      <div class="tester-utilities-tab-stack">
+        <mat-card appearance="outlined" class="page-card tester-utilities-tab-card">
+          <div class="tester-utilities-section-head">
+            <h2>Identified Benes</h2>
+            <p>
+              Per-user filter shell for identifying test beneficiaries. The final attribute list is still pending,
+              so this form only carries the known examples and room for additional tester criteria.
+            </p>
+          </div>
+
+          <form class="page-form tester-utilities-form" [formGroup]="identifiedBenesForm">
+            <div class="tester-utilities-checkbox-grid">
+              <mat-checkbox formControlName="inHospice">In hospice</mat-checkbox>
+              <mat-checkbox formControlName="hasEsrd">Has ESRD</mat-checkbox>
+            </div>
+
+            <div class="page-form-grid tester-utilities-filter-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>Age Band</mat-label>
+                <textarea
+                  matInput
+                  formControlName="ageBand"
+                  rows="2"
+                  placeholder="Example: 50-55"></textarea>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Additional Attributes</mat-label>
+                <textarea
+                  matInput
+                  formControlName="additionalAttributes"
+                  rows="2"
+                  placeholder="Enter comma separated attributes"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="tester-utilities-actions">
+              <button type="button" mat-button (click)="resetIdentifiedBenesFilters()">
+                Reset Filters
+              </button>
+
+              <button type="button" mat-flat-button color="primary">
+                Search Candidates
+              </button>
+            </div>
+          </form>
+        </mat-card>
+
+        <mat-card appearance="outlined" class="page-card tester-utilities-tab-card">
+          <div class="tester-utilities-section-head">
+            <h2>Candidate Results</h2>
+            <p>
+              Search results will render here after the tester SQL rules and table scope are finalized. This section is
+              intentionally reserved so the page shape is visible before backend integration begins.
+            </p>
+          </div>
+
+          <div class="tester-utilities-note">
+            Pending contract: the SQL and source tables used to identify tester candidates are still being finalized.
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Bene</th>
+                  <th>BLK</th>
+                  <th>Attributes</th>
+                  <th>Lock Bene</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="3" class="tester-utilities-empty-cell">
+                    Candidate rows are not available yet. Results will appear here after search execution is wired.
+                  </td>
+                  <td class="tester-utilities-action-cell">
+                    <button type="button" mat-stroked-button disabled>
+                      Lock Bene
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card>
+
+        <mat-card appearance="outlined" class="page-card tester-utilities-tab-card">
+          <div class="tester-utilities-section-head">
+            <h2>Payload Output</h2>
+            <p>
+              JSON payload generation is reserved here, but the payload contract stays deferred until a sample object
+              is provided.
+            </p>
+          </div>
+
+          <div class="tester-utilities-note">
+            Reserved output area only. No payload is generated in this pass.
+          </div>
+
+          <div class="tester-utilities-payload-card">
+            <div class="tester-utilities-payload-header">
+              <div>
+                <div class="tester-utilities-payload-label">Payload Preview</div>
+                <div class="tester-utilities-payload-meta">JSON</div>
+              </div>
+
+              <button
+                type="button"
+                mat-stroked-button
+                [cdkCopyToClipboard]="payloadPreview"
+                (cdkCopyToClipboardCopied)="handlePayloadCopied($event)">
+                {{ payloadCopied() ? 'Copied' : 'Copy' }}
+              </button>
+            </div>
+
+            <pre>{{ payloadPreview }}</pre>
+          </div>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Locked Benes">
+      <mat-card appearance="outlined" class="page-card tester-utilities-tab-card">
+        <h2>Locked Benes</h2>
+        <p>
+          The shared locked-bene view will live here. Table layout and unlock behavior will be added in a later step.
+        </p>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</section>

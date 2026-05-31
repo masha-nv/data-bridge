@@ -6,6 +6,7 @@ import { DevopsComponent } from './features/devops/devops.component';
 import { DescriptionsComponent } from './features/descriptions/descriptions.component';
 import { LoginComponent } from './features/login/login.component';
 import { PlaceholderFeatureComponent } from './features/placeholder/placeholder-feature.component';
+import { TesterUtilitiesComponent } from './features/tester-utilities/tester-utilities.component';
 import { SqlRunnerComponent } from './features/sql-runner/sql-runner.component';
 
 export const routes: Routes = [
@@ -106,12 +107,11 @@ export const routes: Routes = [
 			{
 				path: 'tester-utilities',
 				title: 'Tester Utilities',
-				component: PlaceholderFeatureComponent,
+				component: TesterUtilitiesComponent,
 				data: {
 					feature: 'tester-utilities',
 					title: 'Tester Utilities',
-					enabled: false,
-					placeholder: true,
+					enabled: true,
 				},
 			},
 		],

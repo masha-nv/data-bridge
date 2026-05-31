@@ -88,7 +88,7 @@ export class AppComponent {
     {
       label: 'Tester Utilities',
       path: '/app/tester-utilities',
-      enabled: false,
+      enabled: true,
     },
   ];
 
