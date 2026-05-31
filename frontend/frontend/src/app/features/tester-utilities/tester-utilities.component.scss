@@ -1,0 +1,126 @@
+.tester-utilities-shell {
+  gap: 20px;
+}
+
+.tester-utilities-toolbar-card,
+.tester-utilities-tab-card {
+  padding: 16px;
+}
+
+.tester-utilities-tab-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.tester-utilities-tab-card {
+  display: grid;
+  gap: 10px;
+}
+
+.tester-utilities-section-head {
+  display: grid;
+  gap: 8px;
+}
+
+.tester-utilities-tab-card h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.tester-utilities-tab-card p {
+  margin: 0;
+  color: var(--meps-text-muted);
+}
+
+.tester-utilities-form {
+  gap: 18px;
+}
+
+.tester-utilities-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  gap: 14px 24px;
+}
+
+.tester-utilities-filter-grid {
+  align-items: start;
+}
+
+.tester-utilities-note {
+  padding: 12px 14px;
+  border: 1px dashed var(--meps-border-strong);
+  border-radius: 10px;
+  background: var(--meps-surface-muted);
+  color: var(--meps-text-muted);
+  font-size: 0.92rem;
+}
+
+.tester-utilities-payload-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #203548;
+  border-radius: 12px;
+  background: #12212e;
+  color: #e8f0f6;
+}
+
+.tester-utilities-payload-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tester-utilities-payload-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f7fbff;
+}
+
+.tester-utilities-payload-meta {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8fb6d1;
+}
+
+.tester-utilities-payload-card .mat-mdc-outlined-button:not(:disabled) {
+  color: #e8f0f6;
+  border-color: rgba(232, 240, 246, 0.28);
+}
+
+.tester-utilities-payload-card pre {
+  margin: 0;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(6, 14, 20, 0.55);
+  color: #d7ecff;
+  overflow-x: auto;
+}
+
+.tester-utilities-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 720px) {
+  .tester-utilities-checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tester-utilities-actions {
+    justify-content: stretch;
+  }
+
+  .tester-utilities-actions button {
+    flex: 1 1 100%;
+  }
+
+  .tester-utilities-payload-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
