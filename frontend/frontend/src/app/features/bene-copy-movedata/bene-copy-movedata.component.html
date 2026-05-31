@@ -122,7 +122,7 @@
       <section class="result-panel">
         <div class="detail-header">
           <div>
-            <div class="result-label">Movedata Copy Result</div>
+            <div class="result-label">Bene Copy Result</div>
             <div class="result-meta">
               <span>{{ completedJob.sourceEnvironment }}</span>
               <span>{{ completedJob.targetEnvironment }}</span>
@@ -175,7 +175,7 @@
     <section class="history-panel">
       <div class="detail-header">
         <div>
-          <div class="result-label">Recent Movedata Job History</div>
+          <div class="result-label">Recent Bene Copy Job History</div>
         </div>
 
         @if (historyLoading()) {
@@ -188,7 +188,7 @@
       }
 
       @if (!hasHistory() && !historyLoading()) {
-        <div class="detail-note">No movedata bene-copy job history has been stored yet.</div>
+        <div class="detail-note">No bene copy job history has been stored yet.</div>
       }
 
       @if (hasHistory()) {
